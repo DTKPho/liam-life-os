@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trading-simulator"
+version = "0.1.0"
+description = "Realistic single-instrument trading simulator: synthetic market data, execution modeling, portfolio accounting and performance metrics."
+requires-python = ">=3.10"
+readme = "README.md"
+
+[project.scripts]
+trading-simulator = "trading_simulator.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
