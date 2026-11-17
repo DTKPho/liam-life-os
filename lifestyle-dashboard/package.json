@@ -37,7 +37,8 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "artifactName": "Mon-Lifestyle-${arch}.${ext}"
     },
     "dmg": {
       "title": "Mon Lifestyle"

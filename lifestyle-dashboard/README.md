@@ -14,9 +14,10 @@ Les données restent sur ton ordinateur, rien n'est envoyé en ligne.
 
 ## Installer l'appli sur Mac
 
-1. Sur GitHub, onglet **Actions** → workflow **« Mon Lifestyle — appli Mac »** → dernier run vert
-   → en bas, télécharge l'artefact **Mon-Lifestyle-mac**.
-2. Dézippe : prends le `.dmg` **arm64** (Mac M1/M2/M3/M4) ou **x64** (ancien Mac Intel).
+1. Télécharge directement :
+   - Mac **M1/M2/M3/M4** : https://github.com/DTKPho/liam-life-os/releases/latest/download/Mon-Lifestyle-arm64.dmg
+   - Mac **Intel** : https://github.com/DTKPho/liam-life-os/releases/latest/download/Mon-Lifestyle-x64.dmg
+2. (Toutes les versions : onglet **Releases** du repo.)
 3. Ouvre le `.dmg` et glisse **Mon Lifestyle** dans **Applications**.
 4. L'appli n'est pas signée par Apple : au premier lancement, ouvre le Terminal et tape :
 

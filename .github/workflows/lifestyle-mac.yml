@@ -7,6 +7,9 @@ on:
       - ".github/workflows/lifestyle-mac.yml"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-mac:
     runs-on: macos-latest
@@ -26,3 +29,17 @@ jobs:
         with:
           name: Mon-Lifestyle-mac
           path: lifestyle-dashboard/dist/*.dmg
+      # Publie les .dmg dans une Release : liens de téléchargement directs
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: lifestyle-v${{ github.run_number }}
+          name: Mon Lifestyle (build ${{ github.run_number }})
+          target_commitish: ${{ github.sha }}
+          make_latest: true
+          body: |
+            **Mac M1/M2/M3/M4** → Mon-Lifestyle-arm64.dmg
+            **Mac Intel** → Mon-Lifestyle-x64.dmg
+
+            Après l'avoir glissée dans Applications, lance une fois dans le Terminal :
+            `xattr -cr "/Applications/Mon Lifestyle.app"`
+          files: lifestyle-dashboard/dist/*.dmg
