@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "dist:mac": "electron-builder --mac --publish never"
+    "dist:mac": "electron-builder --mac dmg --arm64 --publish never && electron-builder --mac dmg --x64 --publish never"
   },
   "devDependencies": {
     "electron": "^33.2.1",
@@ -30,13 +30,7 @@
       "category": "public.app-category.lifestyle",
       "icon": "resources/icon.png",
       "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "arm64",
-            "x64"
-          ]
-        }
+        "dmg"
       ],
       "artifactName": "Mon-Lifestyle-${arch}.${ext}"
     },
