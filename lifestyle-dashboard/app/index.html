@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon Lifestyle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #16161a;
+    --surface-2: #1e1e24;
+    --border: #2a2a32;
+    --text: #f2efe9;
+    --muted: #8d8a85;
+    --gold: #c9a45c;
+    --gold-soft: rgba(201,164,92,.14);
+    --danger: #e0645c;
+    --ok: #6fbf8e;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 Inter, system-ui, sans-serif;
+    min-height: 100vh;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px 80px; }
+
+  /* Header */
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 28px 0 20px; flex-wrap: wrap; }
+  .brand { font-family: "Playfair Display", Georgia, serif; font-size: 28px; letter-spacing: .5px; }
+  .brand span { color: var(--gold); }
+  .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    border: 1px solid var(--border); background: var(--surface); border-radius: 10px;
+    padding: 9px 14px; cursor: pointer; transition: border-color .15s, background .15s; white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--gold); }
+  .btn.gold { background: var(--gold); color: #141414; border-color: var(--gold); font-weight: 600; }
+  .btn.gold:hover { filter: brightness(1.08); }
+  .btn.danger { color: var(--danger); }
+  .btn.danger:hover { border-color: var(--danger); }
+  .btn.sm { padding: 6px 10px; font-size: 13px; }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .stat .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; }
+  .stat .value { font-family: "Playfair Display", Georgia, serif; font-size: 30px; margin-top: 4px; }
+  .stat .value.gold { color: var(--gold); }
+  .stat .sub { color: var(--muted); font-size: 13px; }
+  .stat .sub.up { color: var(--ok); }
+  .stat .sub.down { color: var(--danger); }
+
+  /* Breakdown */
+  .breakdown { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 26px; }
+  .breakdown h3 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); font-weight: 500; }
+  .bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--surface-2); gap: 2px; }
+  .bar div { height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; font-size: 13px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .legend b { font-weight: 600; margin-left: 4px; }
+  .legend span.pct { color: var(--muted); margin-left: 4px; }
+
+  /* Toolbar */
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; flex: 1; min-width: 0; padding-bottom: 2px; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { border: 1px solid var(--border); background: transparent; border-radius: 999px; padding: 7px 14px; cursor: pointer; white-space: nowrap; color: var(--muted); }
+  .tab.active { background: var(--gold-soft); border-color: var(--gold); color: var(--text); }
+  .tab .count { opacity: .6; margin-left: 4px; font-size: 12px; }
+  .search { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; width: 200px; max-width: 100%; }
+  .search:focus, .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold); }
+  .seg { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .seg button { background: transparent; border: 0; padding: 8px 12px; cursor: pointer; color: var(--muted); }
+  .seg button.active { background: var(--surface-2); color: var(--text); }
+
+  /* Category sections */
+  .section { margin-bottom: 34px; }
+  .section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .section-head h2 { margin: 0; font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 22px; display: flex; align-items: center; gap: 10px; }
+  .section-head h2 .emoji { font-size: 22px; }
+  .section-head h2 small { font-family: Inter, sans-serif; font-size: 14px; color: var(--muted); font-weight: 400; }
+  .section-head .actions { display: flex; gap: 6px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; cursor: pointer; transition: transform .15s, border-color .15s; display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-2px); border-color: var(--gold); }
+  .card .img { aspect-ratio: 4/3; background: var(--surface-2) center/cover no-repeat; display: grid; place-items: center; font-size: 46px; position: relative; }
+  .card .badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,.65); backdrop-filter: blur(4px); padding: 3px 9px; border-radius: 999px; font-size: 11px; letter-spacing: .6px; text-transform: uppercase; }
+  .card .badge.wish { color: var(--gold); }
+  .card .badge.sold { color: var(--muted); }
+  .card .body { padding: 12px 14px 14px; }
+  .card .name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .meta { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 19px; }
+  .card .price { margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline; }
+  .card .price b { color: var(--gold); font-weight: 600; }
+  .card .price .delta { font-size: 12px; }
+  .delta.up { color: var(--ok); } .delta.down { color: var(--danger); }
+
+  .slot {
+    border: 1.5px dashed var(--border); border-radius: var(--radius); background: transparent; cursor: pointer;
+    min-height: 200px; display: grid; place-items: center; color: var(--muted); transition: border-color .15s, color .15s;
+  }
+  .slot:hover { border-color: var(--gold); color: var(--gold); }
+  .slot .plus { font-size: 32px; line-height: 1; text-align: center; }
+  .slot .t { font-size: 13px; margin-top: 6px; text-align: center; }
+
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); border: 1.5px dashed var(--border); border-radius: var(--radius); }
+  .empty h2 { font-family: "Playfair Display", Georgia, serif; color: var(--text); font-weight: 500; }
+
+  /* Modal */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; z-index: 50; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; width: 100%; max-width: 560px; padding: 22px; }
+  .modal h2 { margin: 0 0 16px; font-family: "Playfair Display", Georgia, serif; font-weight: 500; }
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .field input, .field select, .field textarea { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; width: 100%; }
+  .field textarea { resize: vertical; min-height: 70px; }
+  .photo-row { display: flex; gap: 10px; align-items: center; }
+  .photo-preview { width: 72px; height: 54px; border-radius: 8px; background: var(--surface-2) center/cover no-repeat; flex: none; border: 1px solid var(--border); }
+  .emoji-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+  .emoji-pick button { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; width: 38px; height: 38px; cursor: pointer; font-size: 18px; }
+  .emoji-pick button.active { border-color: var(--gold); background: var(--gold-soft); }
+  .modal-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+  .modal-foot .right { display: flex; gap: 8px; margin-left: auto; }
+
+  /* Detail */
+  .detail-img { aspect-ratio: 16/10; border-radius: 12px; background: var(--surface-2) center/cover no-repeat; display: grid; place-items: center; font-size: 64px; margin-bottom: 16px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .detail-grid div { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+  .detail-grid .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .detail-notes { margin-top: 12px; color: var(--muted); white-space: pre-wrap; }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(80px); transition: transform .25s, opacity .25s; background: var(--surface-2); border: 1px solid var(--gold); padding: 10px 16px; border-radius: 10px; z-index: 60; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Appli desktop macOS : barre de titre intégrée */
+  .desktop-mac header { padding-top: 46px; -webkit-app-region: drag; }
+  .desktop-mac header button, .desktop-mac header input { -webkit-app-region: no-drag; }
+  .desktop-mac body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: 34px; -webkit-app-region: drag; z-index: 40; }
+
+  @media (max-width: 560px) {
+    .form, .detail-grid { grid-template-columns: 1fr; }
+    .brand { font-size: 24px; }
+    .stat .value { font-size: 26px; }
+    .search { width: 100%; }
+    .tabs { flex-basis: 100%; }
+    .seg { flex: 1; } .seg button { flex: 1; }
+    .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat { padding: 14px; }
+    .stat .value { font-size: 22px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .slot { min-height: 160px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Mon <span>Lifestyle</span></div>
+    <div class="header-actions">
+      <button class="btn" id="btnExport" title="Télécharger une sauvegarde">⬇ Exporter</button>
+      <button class="btn" id="btnImport" title="Restaurer une sauvegarde">⬆ Importer</button>
+      <button class="btn gold" id="btnAddCat">+ Catégorie</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+  <div class="breakdown" id="breakdown"></div>
+
+  <div class="toolbar">
+    <div class="tabs" id="tabs"></div>
+    <div class="seg" id="statusFilter">
+      <button data-v="owned" class="active">Possédé</button>
+      <button data-v="wish">Wishlist</button>
+      <button data-v="all">Tout</button>
+    </div>
+    <input class="search" id="search" placeholder="Rechercher…">
+  </div>
+
+  <main id="main"></main>
+</div>
+
+<!-- Item modal -->
+<div class="overlay" id="itemOverlay">
+  <div class="modal">
+    <h2 id="itemTitle">Ajouter</h2>
+    <form class="form" id="itemForm">
+      <div class="field full"><label>Nom</label><input name="name" required placeholder="ex. Porsche 911 GT3"></div>
+      <div class="field"><label>Catégorie</label><select name="cat" id="itemCat"></select></div>
+      <div class="field"><label>Statut</label>
+        <select name="status">
+          <option value="owned">Possédé</option>
+          <option value="wish">Wishlist / objectif</option>
+          <option value="sold">Vendu</option>
+        </select>
+      </div>
+      <div class="field"><label>Marque / modèle</label><input name="brand" placeholder="ex. Rolex Submariner"></div>
+      <div class="field"><label>Année</label><input name="year" inputmode="numeric" placeholder="ex. 2023"></div>
+      <div class="field"><label>Prix d'achat (€)</label><input name="buyPrice" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label>Valeur actuelle (€)</label><input name="value" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label>Date d'achat</label><input name="buyDate" type="date"></div>
+      <div class="field"><label>Lieu / emplacement</label><input name="location" placeholder="ex. Paris, garage, coffre…"></div>
+      <div class="field full"><label>Photo</label>
+        <div class="photo-row">
+          <div class="photo-preview" id="photoPreview"></div>
+          <input name="photoUrl" placeholder="Colle un lien d'image…" style="flex:1">
+          <button type="button" class="btn sm" id="btnUpload">Fichier</button>
+          <input type="file" id="photoFile" accept="image/*" hidden>
+        </div>
+      </div>
+      <div class="field full"><label>Notes</label><textarea name="notes" placeholder="Entretien, numéro de série, assurance…"></textarea></div>
+    </form>
+    <div class="modal-foot">
+      <button class="btn danger" id="btnDeleteItem">Supprimer</button>
+      <div class="right">
+        <button class="btn" data-close>Annuler</button>
+        <button class="btn gold" id="btnSaveItem">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal" id="detailBody"></div>
+</div>
+
+<!-- Category modal -->
+<div class="overlay" id="catOverlay">
+  <div class="modal">
+    <h2 id="catTitle">Nouvelle catégorie</h2>
+    <form class="form" id="catForm">
+      <div class="field full"><label>Nom</label><input name="name" required placeholder="ex. Sneakers, Art, Crypto…"></div>
+      <div class="field full"><label>Icône</label><div class="emoji-pick" id="emojiPick"></div></div>
+      <div class="field"><label>Couleur</label><input name="color" type="color" value="#c9a45c" style="height:42px;padding:4px"></div>
+    </form>
+    <div class="modal-foot">
+      <button class="btn danger" id="btnDeleteCat">Supprimer</button>
+      <div class="right">
+        <button class="btn" data-close>Annuler</button>
+        <button class="btn gold" id="btnSaveCat">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const KEY = "lifestyle-dashboard-v1";
+  const EMOJIS = ["🏠","🏡","🏢","🏖️","🚗","🏎️","🏍️","🛥️","✈️","⌚","💎","👜","👟","👔","🕶️","🎨","🍷","📱","💻","🎮","📷","🎸","🐎","🏌️","💰","📈","🪙","🏦","🎓","🧳"];
+  const DEFAULT_CATS = [
+    { id: "maison",  name: "Maisons",  emoji: "🏠", color: "#c9a45c" },
+    { id: "voiture", name: "Voitures", emoji: "🏎️", color: "#5c8fc9" },
+    { id: "montre",  name: "Montres",  emoji: "⌚", color: "#9a7ad1" },
+  ];
+
+  // ---------- State ----------
+  let state = load();
+  let ui = { cat: "all", status: "owned", q: "", editingItem: null, editingCat: null, pendingPhoto: "" };
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (Array.isArray(s.categories) && Array.isArray(s.items)) return s;
+      }
+    } catch (e) {}
+    return { categories: DEFAULT_CATS.slice(), items: [] };
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (e) { toast("⚠️ Stockage plein — utilise des liens d'image ou exporte une sauvegarde"); }
+  }
+  const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+
+  // ---------- Helpers ----------
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  const num = (v) => { const n = parseFloat(String(v ?? "").replace(/\s/g, "").replace(",", ".")); return isFinite(n) ? n : 0; };
+  const eur = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n || 0);
+  const compact = (n) => Math.abs(n) >= 1e6
+    ? new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 }).format(n / 1e6) + " M€"
+    : eur(n);
+  const catById = (id) => state.categories.find(c => c.id === id);
+  const valueOf = (it) => num(it.value) || num(it.buyPrice);
+  const cssUrl = (u) => `url("${String(u).replace(/["\\\n]/g, "")}")`;
+
+  function toast(msg) {
+    const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2600);
+  }
+
+  // ---------- Render ----------
+  function render() { renderStats(); renderBreakdown(); renderTabs(); renderMain(); }
+
+  function renderStats() {
+    const owned = state.items.filter(i => i.status === "owned");
+    const wish = state.items.filter(i => i.status === "wish");
+    const total = owned.reduce((s, i) => s + valueOf(i), 0);
+    const invested = owned.reduce((s, i) => s + num(i.buyPrice), 0);
+    const gain = owned.filter(i => num(i.buyPrice) && num(i.value)).reduce((s, i) => s + num(i.value) - num(i.buyPrice), 0);
+    const wishTotal = wish.reduce((s, i) => s + valueOf(i), 0);
+    const pct = invested ? (gain / invested) * 100 : 0;
+    $("#stats").innerHTML = `
+      <div class="stat"><div class="label">Valeur totale</div><div class="value gold">${compact(total)}</div><div class="sub">${owned.length} bien${owned.length > 1 ? "s" : ""} possédé${owned.length > 1 ? "s" : ""}</div></div>
+      <div class="stat"><div class="label">Plus / moins-value</div><div class="value">${gain >= 0 ? "+" : ""}${compact(gain)}</div><div class="sub ${gain > 0 ? "up" : gain < 0 ? "down" : ""}">${invested ? (pct >= 0 ? "+" : "") + pct.toFixed(1) + " % vs achat" : "Ajoute des prix d'achat"}</div></div>
+      <div class="stat"><div class="label">Investi</div><div class="value">${compact(invested)}</div><div class="sub">Prix d'achat cumulés</div></div>
+      <div class="stat"><div class="label">Wishlist</div><div class="value">${compact(wishTotal)}</div><div class="sub">${wish.length} objectif${wish.length > 1 ? "s" : ""}</div></div>`;
+  }
+
+  function renderBreakdown() {
+    const owned = state.items.filter(i => i.status === "owned");
+    const total = owned.reduce((s, i) => s + valueOf(i), 0);
+    const rows = state.categories.map(c => ({ c, v: owned.filter(i => i.cat === c.id).reduce((s, i) => s + valueOf(i), 0) }))
+      .filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const el = $("#breakdown");
+    if (!total) { el.style.display = "none"; return; }
+    el.style.display = "";
+    el.innerHTML = `<h3>Répartition du patrimoine</h3>
+      <div class="bar">${rows.map(r => `<div style="width:${(r.v / total) * 100}%;background:${esc(r.c.color)}" title="${esc(r.c.name)}"></div>`).join("")}</div>
+      <div class="legend">${rows.map(r => `<span><i style="background:${esc(r.c.color)}"></i>${esc(r.c.emoji)} ${esc(r.c.name)}<b>${compact(r.v)}</b><span class="pct">${Math.round((r.v / total) * 100)} %</span></span>`).join("")}</div>`;
+  }
+
+  function matches(it) {
+    if (ui.status !== "all" && it.status !== ui.status) return false;
+    if (!ui.q) return true;
+    const q = ui.q.toLowerCase();
+    return [it.name, it.brand, it.location, it.notes, it.year].some(v => String(v || "").toLowerCase().includes(q));
+  }
+
+  function renderTabs() {
+    const count = (id) => state.items.filter(i => (id === "all" || i.cat === id) && matches(i)).length;
+    const tabs = [{ id: "all", name: "Tout", emoji: "✦" }, ...state.categories];
+    if (ui.cat !== "all" && !catById(ui.cat)) ui.cat = "all";
+    $("#tabs").innerHTML = tabs.map(c =>
+      `<button class="tab ${ui.cat === c.id ? "active" : ""}" data-cat="${esc(c.id)}">${esc(c.emoji)} ${esc(c.name)}<span class="count">${count(c.id)}</span></button>`
+    ).join("");
+  }
+
+  function cardHtml(it) {
+    const c = catById(it.cat);
+    const img = it.photo ? `style="background-image:${esc(cssUrl(it.photo))}"` : "";
+    const badge = it.status === "wish" ? `<span class="badge wish">Wishlist</span>` : it.status === "sold" ? `<span class="badge sold">Vendu</span>` : "";
+    const bp = num(it.buyPrice), v = num(it.value);
+    const delta = bp && v && it.status === "owned" ? ((v - bp) / bp) * 100 : null;
+    const meta = [it.brand, it.year].filter(Boolean).join(" · ") || it.location || "";
+    return `<div class="card" data-item="${esc(it.id)}">
+      <div class="img" ${img}>${it.photo ? "" : esc(c?.emoji || "✦")}${badge}</div>
+      <div class="body">
+        <div class="name">${esc(it.name)}</div>
+        <div class="meta">${esc(meta)}</div>
+        <div class="price"><b>${valueOf(it) ? eur(valueOf(it)) : "—"}</b>${delta !== null ? `<span class="delta ${delta >= 0 ? "up" : "down"}">${delta >= 0 ? "▲" : "▼"} ${Math.abs(delta).toFixed(1)} %</span>` : ""}</div>
+      </div></div>`;
+  }
+
+  function sectionHtml(c) {
+    const items = state.items.filter(i => i.cat === c.id && matches(i));
+    const total = items.filter(i => i.status === "owned").reduce((s, i) => s + valueOf(i), 0);
+    const hideSlot = ui.q && !items.length;
+    if (hideSlot && ui.cat === "all") return "";
+    return `<section class="section">
+      <div class="section-head">
+        <h2><span class="emoji">${esc(c.emoji)}</span>${esc(c.name)} <small>${items.length} · ${eur(total)}</small></h2>
+        <div class="actions"><button class="btn sm" data-editcat="${esc(c.id)}">Modifier</button></div>
+      </div>
+      <div class="grid">
+        ${items.map(cardHtml).join("")}
+        <button class="slot" data-add="${esc(c.id)}"><div><div class="plus">+</div><div class="t">Ajouter ${ui.status === "wish" ? "un objectif" : "un élément"}</div></div></button>
+      </div></section>`;
+  }
+
+  function renderMain() {
+    const main = $("#main");
+    if (!state.categories.length) {
+      main.innerHTML = `<div class="empty"><h2>Ton dashboard est vide</h2><p>Crée ta première catégorie : maison, voitures, montres, sneakers…</p><button class="btn gold" data-newcat>+ Créer une catégorie</button></div>`;
+      return;
+    }
+    const cats = ui.cat === "all" ? state.categories : [catById(ui.cat)];
+    const html = cats.map(sectionHtml).join("");
+    main.innerHTML = html || `<div class="empty"><p>Aucun résultat pour « ${esc(ui.q)} »</p></div>`;
+  }
+
+  // ---------- Modals ----------
+  function openOverlay(id) { $(id).classList.add("open"); document.body.style.overflow = "hidden"; }
+  function closeOverlays() { document.querySelectorAll(".overlay").forEach(o => o.classList.remove("open")); document.body.style.overflow = ""; }
+
+  function openItemForm(item, catId) {
+    ui.editingItem = item ? item.id : null;
+    const f = $("#itemForm");
+    f.reset();
+    $("#itemCat").innerHTML = state.categories.map(c => `<option value="${esc(c.id)}">${esc(c.emoji)} ${esc(c.name)}</option>`).join("");
+    const it = item || { cat: catId || state.categories[0]?.id, status: ui.status === "all" ? "owned" : ui.status };
+    ["name","cat","status","brand","year","buyPrice","value","buyDate","location","notes"].forEach(k => { if (f[k]) f[k].value = it[k] ?? ""; });
+    ui.pendingPhoto = it.photo || "";
+    f.photoUrl.value = ui.pendingPhoto.startsWith("data:") ? "" : ui.pendingPhoto;
+    updatePhotoPreview();
+    $("#itemTitle").textContent = item ? "Modifier" : "Ajouter";
+    $("#btnDeleteItem").style.visibility = item ? "visible" : "hidden";
+    closeOverlays(); openOverlay("#itemOverlay");
+    setTimeout(() => f.name.focus(), 50);
+  }
+  function updatePhotoPreview() {
+    $("#photoPreview").style.backgroundImage = ui.pendingPhoto ? cssUrl(ui.pendingPhoto) : "";
+  }
+
+  function saveItem() {
+    const f = $("#itemForm");
+    if (!f.name.value.trim()) { f.name.focus(); return; }
+    const data = {};
+    ["name","cat","status","brand","year","buyPrice","value","buyDate","location","notes"].forEach(k => data[k] = f[k].value.trim());
+    data.photo = ui.pendingPhoto;
+    if (ui.editingItem) {
+      const it = state.items.find(i => i.id === ui.editingItem);
+      Object.assign(it, data, { updatedAt: Date.now() });
+    } else {
+      state.items.push({ id: uid(), createdAt: Date.now(), ...data });
+    }
+    save(); closeOverlays(); render(); toast(ui.editingItem ? "Modifié ✓" : "Ajouté ✓");
+  }
+
+  function openDetail(id) {
+    const it = state.items.find(i => i.id === id); if (!it) return;
+    const c = catById(it.cat);
+    const bp = num(it.buyPrice), v = num(it.value);
+    const fmtDate = it.buyDate ? new Date(it.buyDate).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "";
+    const rows = [
+      ["Catégorie", c ? `${c.emoji} ${c.name}` : "—"],
+      ["Statut", { owned: "Possédé", wish: "Wishlist", sold: "Vendu" }[it.status] || "—"],
+      ["Marque / modèle", it.brand], ["Année", it.year],
+      ["Prix d'achat", bp ? eur(bp) : ""], ["Valeur actuelle", v ? eur(v) : ""],
+      ["Plus-value", bp && v ? `${v - bp >= 0 ? "+" : ""}${eur(v - bp)} (${(((v - bp) / bp) * 100).toFixed(1)} %)` : ""],
+      ["Date d'achat", fmtDate], ["Emplacement", it.location],
+    ].filter(r => r[1]);
+    $("#detailBody").innerHTML = `
+      <div class="detail-img" ${it.photo ? `style="background-image:${esc(cssUrl(it.photo))}"` : ""}>${it.photo ? "" : esc(c?.emoji || "✦")}</div>
+      <h2>${esc(it.name)}</h2>
+      <div class="detail-grid">${rows.map(([k, val]) => `<div><div class="k">${esc(k)}</div>${esc(val)}</div>`).join("")}</div>
+      ${it.notes ? `<div class="detail-notes">${esc(it.notes)}</div>` : ""}
+      <div class="modal-foot"><div class="right"><button class="btn" data-close>Fermer</button><button class="btn gold" data-edititem="${esc(it.id)}">Modifier</button></div></div>`;
+    openOverlay("#detailOverlay");
+  }
+
+  function openCatForm(cat) {
+    ui.editingCat = cat ? cat.id : null;
+    const f = $("#catForm"); f.reset();
+    f.name.value = cat?.name || "";
+    f.color.value = cat?.color || ["#c9a45c","#5c8fc9","#9a7ad1","#5cc9a0","#c95c7a","#c9875c"][state.categories.length % 6];
+    const chosen = cat?.emoji || EMOJIS[0];
+    $("#emojiPick").innerHTML = EMOJIS.map(e => `<button type="button" class="${e === chosen ? "active" : ""}" data-emoji="${e}">${e}</button>`).join("");
+    $("#catTitle").textContent = cat ? "Modifier la catégorie" : "Nouvelle catégorie";
+    $("#btnDeleteCat").style.visibility = cat ? "visible" : "hidden";
+    openOverlay("#catOverlay");
+    setTimeout(() => f.name.focus(), 50);
+  }
+
+  function saveCat() {
+    const f = $("#catForm");
+    const name = f.name.value.trim(); if (!name) { f.name.focus(); return; }
+    const emoji = $("#emojiPick .active")?.dataset.emoji || "✦";
+    if (ui.editingCat) Object.assign(catById(ui.editingCat), { name, emoji, color: f.color.value });
+    else { const id = uid(); state.categories.push({ id, name, emoji, color: f.color.value }); ui.cat = id; }
+    save(); closeOverlays(); render();
+  }
+
+  function deleteCat() {
+    const c = catById(ui.editingCat); if (!c) return;
+    const n = state.items.filter(i => i.cat === c.id).length;
+    if (!confirm(`Supprimer « ${c.name} »${n ? ` et ses ${n} élément(s)` : ""} ?`)) return;
+    state.categories = state.categories.filter(x => x.id !== c.id);
+    state.items = state.items.filter(i => i.cat !== c.id);
+    save(); closeOverlays(); render();
+  }
+
+  // Resize uploaded images so they fit in browser storage
+  function readImage(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const max = 900, k = Math.min(1, max / Math.max(img.width, img.height));
+          const cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+          cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+          resolve(cv.toDataURL("image/jpeg", 0.8));
+        };
+        img.onerror = reject; img.src = r.result;
+      };
+      r.onerror = reject; r.readAsDataURL(file);
+    });
+  }
+
+  // ---------- Events ----------
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-cat],[data-add],[data-item],[data-editcat],[data-edititem],[data-close],[data-newcat],[data-emoji]");
+    if (!t) { if (e.target.classList.contains("overlay")) closeOverlays(); return; }
+    const d = t.dataset;
+    if (d.cat) { ui.cat = d.cat; renderTabs(); renderMain(); }
+    else if (d.add) openItemForm(null, d.add);
+    else if (d.item) openDetail(d.item);
+    else if (d.editcat) openCatForm(catById(d.editcat));
+    else if (d.edititem) openItemForm(state.items.find(i => i.id === d.edititem));
+    else if ("close" in d) closeOverlays();
+    else if ("newcat" in d) openCatForm(null);
+    else if (d.emoji) { document.querySelectorAll("#emojiPick button").forEach(b => b.classList.toggle("active", b === t)); }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeOverlays();
+    if (e.key === "Enter" && e.target.tagName === "INPUT") {
+      if (e.target.closest("#itemForm")) { e.preventDefault(); saveItem(); }
+      if (e.target.closest("#catForm")) { e.preventDefault(); saveCat(); }
+    }
+  });
+
+  $("#btnAddCat").onclick = () => openCatForm(null);
+  $("#btnSaveItem").onclick = saveItem;
+  $("#btnSaveCat").onclick = saveCat;
+  $("#btnDeleteCat").onclick = deleteCat;
+  $("#btnDeleteItem").onclick = () => {
+    const it = state.items.find(i => i.id === ui.editingItem);
+    if (it && confirm(`Supprimer « ${it.name} » ?`)) {
+      state.items = state.items.filter(i => i.id !== it.id);
+      save(); closeOverlays(); render(); toast("Supprimé");
+    }
+  };
+  $("#itemForm").photoUrl.addEventListener("input", (e) => { ui.pendingPhoto = e.target.value.trim(); updatePhotoPreview(); });
+  $("#btnUpload").onclick = () => $("#photoFile").click();
+  $("#photoFile").onchange = async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    try { ui.pendingPhoto = await readImage(file); $("#itemForm").photoUrl.value = ""; updatePhotoPreview(); }
+    catch { toast("Image illisible"); }
+    e.target.value = "";
+  };
+
+  $("#statusFilter").onclick = (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    ui.status = b.dataset.v;
+    document.querySelectorAll("#statusFilter button").forEach(x => x.classList.toggle("active", x === b));
+    renderTabs(); renderMain();
+  };
+  $("#search").oninput = (e) => { ui.q = e.target.value.trim(); renderTabs(); renderMain(); };
+
+  $("#btnExport").onclick = () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `lifestyle-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  $("#btnImport").onclick = () => $("#importFile").click();
+  $("#importFile").onchange = async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    try {
+      const s = JSON.parse(await file.text());
+      if (!Array.isArray(s.categories) || !Array.isArray(s.items)) throw 0;
+      if (!confirm("Remplacer toutes tes données actuelles par cette sauvegarde ?")) return;
+      state = s; save(); render(); toast("Sauvegarde importée ✓");
+    } catch { toast("Fichier invalide"); }
+    e.target.value = "";
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

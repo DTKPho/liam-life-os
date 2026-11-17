@@ -1,0 +1,46 @@
+{
+  "name": "mon-lifestyle",
+  "productName": "Mon Lifestyle",
+  "version": "1.0.0",
+  "description": "Dashboard de mon lifestyle : maisons, voitures, montres…",
+  "repository": "github:DTKPho/liam-life-os",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist:mac": "electron-builder --mac --publish never"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.dtkpho.monlifestyle",
+    "productName": "Mon Lifestyle",
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.lifestyle",
+      "icon": "resources/icon.png",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ]
+    },
+    "dmg": {
+      "title": "Mon Lifestyle"
+    }
+  }
+}
