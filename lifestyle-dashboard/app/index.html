@@ -3,581 +3,1072 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mon Lifestyle</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Lifestyle</title>
 <style>
   :root {
-    --bg: #0d0d0f;
-    --surface: #16161a;
-    --surface-2: #1e1e24;
-    --border: #2a2a32;
-    --text: #f2efe9;
-    --muted: #8d8a85;
-    --gold: #c9a45c;
-    --gold-soft: rgba(201,164,92,.14);
-    --danger: #e0645c;
-    --ok: #6fbf8e;
-    --radius: 14px;
+    --bg: #0b0b0c;
+    --side: #101012;
+    --surface: #141417;
+    --surface-2: #1b1b1f;
+    --surface-3: #232328;
+    --border: #232328;
+    --border-strong: #303037;
+    --text: #ededee;
+    --text-2: #b4b4b9;
+    --muted: #7c7c83;
+    --accent: #c8a96a;
+    --accent-ink: #17140d;
+    --accent-soft: rgba(200,169,106,.12);
+    --up: #5fbf8f;
+    --down: #e06c62;
+    --radius: 12px;
+    --side-w: 248px;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; }
+  html, body { margin: 0; height: 100%; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font: 15px/1.5 Inter, system-ui, sans-serif;
-    min-height: 100vh;
+    background: var(--bg); color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "tnum" 1;
   }
   button, input, select, textarea { font: inherit; color: inherit; }
-  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px 80px; }
+  button { cursor: pointer; }
+  svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  img { display: block; }
 
-  /* Header */
-  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 28px 0 20px; flex-wrap: wrap; }
-  .brand { font-family: "Playfair Display", Georgia, serif; font-size: 28px; letter-spacing: .5px; }
-  .brand span { color: var(--gold); }
-  .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  /* ---------- Layout ---------- */
+  .app { display: flex; height: 100vh; }
+  aside {
+    width: var(--side-w); flex: none; background: var(--side); border-right: 1px solid var(--border);
+    height: 100vh; display: flex; flex-direction: column; padding: 22px 14px 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 11px; padding: 4px 10px 22px; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(160deg,#26262c,#121214); border: 1px solid var(--border-strong); display: grid; place-items: center; color: var(--accent); }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .brand b { display: block; font-size: 15px; letter-spacing: -.1px; font-weight: 600; }
+  .brand small { display: block; color: var(--muted); font-size: 12px; margin-top: -1px; }
+  .nav-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.1px; color: var(--muted); padding: 18px 10px 8px; display: flex; justify-content: space-between; align-items: center; }
+  .nav-label button { background: none; border: 0; color: var(--muted); padding: 2px; border-radius: 6px; display: grid; }
+  .nav-label button:hover { color: var(--text); background: var(--surface-2); }
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav-scroll { overflow-y: auto; flex: 1; margin: 0 -4px; padding: 0 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; border: 0; background: none;
+    color: var(--text-2); text-align: left; width: 100%;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .nav-item.active { background: var(--surface-3); color: var(--text); }
+  .nav-item.active svg { color: var(--accent); }
+  .nav-item span.n { margin-left: auto; color: var(--muted); font-size: 12px; }
+  .nav-item .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .side-foot { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px; display: flex; flex-direction: column; gap: 2px; }
+  .side-foot .nav-item { font-size: 13px; padding: 7px 10px; }
+
+  main { flex: 1; min-width: 0; overflow-y: auto; height: 100vh; }
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: rgba(11,11,12,.86); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; align-items: center; gap: 14px;
+  }
+  .crumbs { font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; min-width: 0; }
+  .crumbs b { color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar .spacer { flex: 1; }
+  .search { position: relative; }
+  .search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 15px; height: 15px; }
+  .search input { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px 7px 32px; width: 240px; }
+  .search input:focus { outline: none; border-color: var(--border-strong); background: var(--surface-2); }
+  .content { padding: 28px 32px 80px; max-width: 1360px; }
 
   .btn {
-    border: 1px solid var(--border); background: var(--surface); border-radius: 10px;
-    padding: 9px 14px; cursor: pointer; transition: border-color .15s, background .15s; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border-strong); background: var(--surface-2);
+    border-radius: 8px; padding: 7px 13px; white-space: nowrap; font-weight: 500; font-size: 13px; transition: background .12s, border-color .12s;
   }
-  .btn:hover { border-color: var(--gold); }
-  .btn.gold { background: var(--gold); color: #141414; border-color: var(--gold); font-weight: 600; }
-  .btn.gold:hover { filter: brightness(1.08); }
-  .btn.danger { color: var(--danger); }
-  .btn.danger:hover { border-color: var(--danger); }
-  .btn.sm { padding: 6px 10px; font-size: 13px; }
+  .btn:hover { background: var(--surface-3); }
+  .btn svg { width: 15px; height: 15px; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn.primary:hover { filter: brightness(1.07); }
+  .btn.ghost { background: transparent; border-color: transparent; color: var(--text-2); }
+  .btn.ghost:hover { background: var(--surface-2); color: var(--text); }
+  .btn.danger { color: var(--down); background: transparent; }
+  .btn.danger:hover { border-color: var(--down); }
 
-  /* Stats */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
-  .stat .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; }
-  .stat .value { font-family: "Playfair Display", Georgia, serif; font-size: 30px; margin-top: 4px; }
-  .stat .value.gold { color: var(--gold); }
-  .stat .sub { color: var(--muted); font-size: 13px; }
-  .stat .sub.up { color: var(--ok); }
-  .stat .sub.down { color: var(--danger); }
+  /* ---------- Overview ---------- */
+  .page-title { font-size: 26px; font-weight: 600; letter-spacing: -.5px; margin: 0; }
+  .page-sub { color: var(--muted); margin: 4px 0 0; }
+  .hero { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin: 22px 0 18px; }
+  .kpi { background: var(--surface); padding: 18px 20px; }
+  .kpi .l { color: var(--muted); font-size: 12px; }
+  .kpi .v { font-size: 24px; font-weight: 600; letter-spacing: -.5px; margin-top: 6px; white-space: nowrap; }
+  .kpi.main .v { font-size: 34px; letter-spacing: -1px; }
+  .kpi .s { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .pill { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 500; padding: 1px 7px; border-radius: 999px; }
+  .pill.up { color: var(--up); background: rgba(95,191,143,.1); }
+  .pill.down { color: var(--down); background: rgba(224,108,98,.1); }
+  .pill.flat { color: var(--muted); background: var(--surface-2); }
 
-  /* Breakdown */
-  .breakdown { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 26px; }
-  .breakdown h3 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); font-weight: 500; }
-  .bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--surface-2); gap: 2px; }
-  .bar div { height: 100%; }
-  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; font-size: 13px; }
-  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
-  .legend b { font-weight: 600; margin-left: 4px; }
-  .legend span.pct { color: var(--muted); margin-left: 4px; }
+  .row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 34px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; min-width: 0; }
+  .panel h3 { margin: 0; font-size: 14px; font-weight: 600; }
+  .panel .ph { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .panel .ph small { color: var(--muted); font-size: 12px; }
+  .chart { position: relative; height: 220px; }
+  .chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .chart .tip { position: absolute; pointer-events: none; background: var(--surface-3); border: 1px solid var(--border-strong); border-radius: 8px; padding: 7px 10px; font-size: 12px; white-space: nowrap; transform: translate(-50%, -100%); margin-top: -12px; display: none; box-shadow: 0 6px 20px rgba(0,0,0,.4); }
+  .chart .tip b { display: block; font-size: 13px; }
+  .chart .tip span { color: var(--muted); }
+  .chart-empty { height: 220px; display: grid; place-items: center; text-align: center; color: var(--muted); font-size: 13px; border: 1px dashed var(--border-strong); border-radius: 10px; padding: 20px; }
+  .alloc { display: flex; flex-direction: column; gap: 14px; }
+  .alloc-row { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; background: none; border: 0; padding: 0; text-align: left; }
+  .alloc-row .nm { display: flex; align-items: center; gap: 8px; color: var(--text-2); min-width: 0; }
+  .alloc-row .nm span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .alloc-row .nm svg { width: 15px; height: 15px; color: var(--muted); }
+  .alloc-row .val { font-weight: 500; }
+  .alloc-row .val small { color: var(--muted); font-weight: 400; margin-left: 6px; }
+  .alloc-row .track { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
+  .alloc-row .track div { height: 100%; border-radius: 3px; background: var(--accent); }
+  .alloc-row:hover .nm { color: var(--text); }
 
-  /* Toolbar */
-  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
-  .tabs { display: flex; gap: 6px; overflow-x: auto; flex: 1; min-width: 0; padding-bottom: 2px; scrollbar-width: none; }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab { border: 1px solid var(--border); background: transparent; border-radius: 999px; padding: 7px 14px; cursor: pointer; white-space: nowrap; color: var(--muted); }
-  .tab.active { background: var(--gold-soft); border-color: var(--gold); color: var(--text); }
-  .tab .count { opacity: .6; margin-left: 4px; font-size: 12px; }
-  .search { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; width: 200px; max-width: 100%; }
-  .search:focus, .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold); }
-  .seg { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-  .seg button { background: transparent; border: 0; padding: 8px 12px; cursor: pointer; color: var(--muted); }
-  .seg button.active { background: var(--surface-2); color: var(--text); }
+  .sec { margin-bottom: 36px; }
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .sec-icon { width: 34px; height: 34px; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--border); display: grid; place-items: center; color: var(--accent); }
+  .sec-head h2 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
+  .sec-head .meta { color: var(--muted); font-size: 13px; }
+  .sec-head .spacer { flex: 1; }
 
-  /* Category sections */
-  .section { margin-bottom: 34px; }
-  .section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-  .section-head h2 { margin: 0; font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 22px; display: flex; align-items: center; gap: 10px; }
-  .section-head h2 .emoji { font-size: 22px; }
-  .section-head h2 small { font-family: Inter, sans-serif; font-size: 14px; color: var(--muted); font-weight: 400; }
-  .section-head .actions { display: flex; gap: 6px; }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    overflow: hidden; cursor: pointer; transition: transform .15s, border-color .15s; display: flex; flex-direction: column;
+  /* ---------- Cards ---------- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color .15s, transform .15s; position: relative; }
+  .card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .card.drop { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .media { aspect-ratio: 4 / 3; background: var(--surface-2); position: relative; overflow: hidden; }
+  .media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .card:hover .media img { transform: scale(1.03); }
+  .media .tag { position: absolute; top: 10px; left: 10px; font-size: 11px; font-weight: 500; letter-spacing: .3px; padding: 3px 8px; border-radius: 6px; background: rgba(10,10,12,.72); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.08); }
+  .media .tag.wish { color: var(--accent); }
+  .media .tag.sold { color: var(--text-2); }
+  .media .count { position: absolute; bottom: 10px; right: 10px; display: flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 7px; border-radius: 6px; background: rgba(10,10,12,.72); backdrop-filter: blur(6px); }
+  .media .count svg { width: 12px; height: 12px; }
+  .placeholder {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--muted);
+    background: radial-gradient(120% 90% at 50% 0%, #1f1f24 0%, #151518 70%); border: 0; width: 100%; font-size: 12.5px;
   }
-  .card:hover { transform: translateY(-2px); border-color: var(--gold); }
-  .card .img { aspect-ratio: 4/3; background: var(--surface-2) center/cover no-repeat; display: grid; place-items: center; font-size: 46px; position: relative; }
-  .card .badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,.65); backdrop-filter: blur(4px); padding: 3px 9px; border-radius: 999px; font-size: 11px; letter-spacing: .6px; text-transform: uppercase; }
-  .card .badge.wish { color: var(--gold); }
-  .card .badge.sold { color: var(--muted); }
-  .card .body { padding: 12px 14px 14px; }
-  .card .name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card .meta { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 19px; }
-  .card .price { margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline; }
-  .card .price b { color: var(--gold); font-weight: 600; }
-  .card .price .delta { font-size: 12px; }
-  .delta.up { color: var(--ok); } .delta.down { color: var(--danger); }
-
+  .placeholder svg.big { width: 38px; height: 38px; stroke-width: 1.2; color: #4a4a52; }
+  .placeholder .add { display: flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--border-strong); border-radius: 7px; background: rgba(0,0,0,.2); }
+  .placeholder .add svg { width: 13px; height: 13px; }
+  .placeholder:hover .add { border-color: var(--accent); color: var(--text); }
+  .card .body { padding: 13px 15px 15px; }
+  .card .ttl { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .sub { color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 19px; }
+  .card .foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .card .price { font-weight: 600; font-size: 15px; letter-spacing: -.2px; }
+  .card .price.none { color: var(--muted); font-weight: 400; font-size: 13px; }
   .slot {
-    border: 1.5px dashed var(--border); border-radius: var(--radius); background: transparent; cursor: pointer;
-    min-height: 200px; display: grid; place-items: center; color: var(--muted); transition: border-color .15s, color .15s;
+    border: 1px dashed var(--border-strong); border-radius: var(--radius); background: transparent; min-height: 260px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--muted); transition: border-color .15s, color .15s, background .15s;
   }
-  .slot:hover { border-color: var(--gold); color: var(--gold); }
-  .slot .plus { font-size: 32px; line-height: 1; text-align: center; }
-  .slot .t { font-size: 13px; margin-top: 6px; text-align: center; }
+  .slot:hover { border-color: var(--accent); color: var(--text); background: rgba(200,169,106,.03); }
+  .slot .c { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-strong); display: grid; place-items: center; }
+  .slot:hover .c { border-color: var(--accent); color: var(--accent); }
 
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); border: 1.5px dashed var(--border); border-radius: var(--radius); }
-  .empty h2 { font-family: "Playfair Display", Georgia, serif; color: var(--text); font-weight: 500; }
+  .cat-header { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .cat-header .sec-icon { width: 48px; height: 48px; border-radius: 12px; }
+  .cat-header .sec-icon svg { width: 22px; height: 22px; }
+  .cat-header .spacer { flex: 1; }
+  .cat-header .actions { display: flex; gap: 8px; }
+  .stats-strip { display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 22px; flex-wrap: wrap; }
+  .stats-strip .kpi { flex: 1; min-width: 150px; }
+  .tabs { display: inline-flex; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 3px; margin-bottom: 18px; }
+  .tabs button { border: 0; background: none; color: var(--muted); padding: 5px 12px; border-radius: 6px; font-size: 13px; }
+  .tabs button.active { background: var(--surface-3); color: var(--text); }
 
-  /* Modal */
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; z-index: 50; }
+  .empty { border: 1px dashed var(--border-strong); border-radius: var(--radius); padding: 56px 24px; text-align: center; color: var(--muted); }
+  .empty h3 { color: var(--text); font-size: 18px; margin: 12px 0 6px; font-weight: 600; }
+  .empty .sec-icon { margin: 0 auto; width: 48px; height: 48px; }
+
+  /* ---------- Modals ---------- */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.66); backdrop-filter: blur(3px); display: none; align-items: flex-start; justify-content: center; padding: 48px 16px; overflow-y: auto; z-index: 50; }
   .overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; width: 100%; max-width: 560px; padding: 22px; }
-  .modal h2 { margin: 0 0 16px; font-family: "Playfair Display", Georgia, serif; font-weight: 500; }
-  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .field { display: flex; flex-direction: column; gap: 5px; }
-  .field.full { grid-column: 1 / -1; }
-  .field label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .field input, .field select, .field textarea { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; width: 100%; }
-  .field textarea { resize: vertical; min-height: 70px; }
-  .photo-row { display: flex; gap: 10px; align-items: center; }
-  .photo-preview { width: 72px; height: 54px; border-radius: 8px; background: var(--surface-2) center/cover no-repeat; flex: none; border: 1px solid var(--border); }
-  .emoji-pick { display: flex; flex-wrap: wrap; gap: 6px; }
-  .emoji-pick button { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; width: 38px; height: 38px; cursor: pointer; font-size: 18px; }
-  .emoji-pick button.active { border-color: var(--gold); background: var(--gold-soft); }
-  .modal-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
-  .modal-foot .right { display: flex; gap: 8px; margin-left: auto; }
+  .modal { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 16px; width: 100%; max-width: 640px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+  .modal.wide { max-width: 1080px; }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--border); }
+  .modal-head h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .x { border: 0; background: none; color: var(--muted); padding: 4px; border-radius: 6px; display: grid; }
+  .x:hover { background: var(--surface-2); color: var(--text); }
+  .modal-body { padding: 20px 22px; }
+  .modal-foot { display: flex; gap: 8px; padding: 14px 22px; border-top: 1px solid var(--border); }
+  .modal-foot .spacer { flex: 1; }
+
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form .full { grid-column: 1 / -1; }
+  .form h4 { grid-column: 1 / -1; margin: 8px 0 -4px; font-size: 11px; text-transform: uppercase; letter-spacing: 1.1px; color: var(--muted); font-weight: 500; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field label { font-size: 12.5px; color: var(--text-2); }
+  .field input, .field select, .field textarea { background: var(--bg); border: 1px solid var(--border-strong); border-radius: 8px; padding: 8px 11px; width: 100%; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .money { position: relative; }
+  .money input { padding-right: 28px; }
+  .money::after { content: "€"; position: absolute; right: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+
+  .dropzone { border: 1px dashed var(--border-strong); border-radius: 10px; padding: 14px; background: var(--bg); transition: border-color .15s, background .15s; }
+  .dropzone.over { border-color: var(--accent); background: var(--accent-soft); }
+  .thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .thumb { width: 92px; height: 69px; border-radius: 7px; overflow: hidden; position: relative; background: var(--surface-2); border: 1px solid var(--border); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb .rm { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; border: 0; background: rgba(0,0,0,.7); color: #fff; display: grid; place-items: center; padding: 0; opacity: 0; transition: opacity .12s; }
+  .thumb:hover .rm { opacity: 1; }
+  .thumb .rm svg { width: 11px; height: 11px; stroke-width: 2.2; }
+  .thumb .cover { position: absolute; left: 4px; bottom: 4px; font-size: 10px; padding: 1px 5px; border-radius: 4px; background: rgba(0,0,0,.7); color: var(--accent); }
+  .thumb.add { display: grid; place-items: center; color: var(--muted); border-style: dashed; border-color: var(--border-strong); background: none; }
+  .thumb.add:hover { color: var(--accent); border-color: var(--accent); }
+  .dz-hint { color: var(--muted); font-size: 12px; margin-top: 10px; }
+
+  .types { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 8px; }
+  .type { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 12px 6px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg); color: var(--text-2); font-size: 12.5px; }
+  .type svg { width: 22px; height: 22px; }
+  .type:hover { color: var(--text); border-color: var(--muted); }
+  .type.active { border-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+  .type.active svg { color: var(--accent); }
 
   /* Detail */
-  .detail-img { aspect-ratio: 16/10; border-radius: 12px; background: var(--surface-2) center/cover no-repeat; display: grid; place-items: center; font-size: 64px; margin-bottom: 16px; }
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .detail-grid div { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
-  .detail-grid .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .detail-notes { margin-top: 12px; color: var(--muted); white-space: pre-wrap; }
+  .detail { display: grid; grid-template-columns: 1.35fr 1fr; }
+  .gallery { padding: 18px; border-right: 1px solid var(--border); min-width: 0; }
+  .stage { aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; background: #0e0e10; position: relative; }
+  .stage img { width: 100%; height: 100%; object-fit: cover; }
+  .stage .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; display: grid; place-items: center; opacity: 0; transition: opacity .15s; }
+  .stage:hover .nav-arrow { opacity: 1; }
+  .stage .prev { left: 10px; } .stage .next { right: 10px; }
+  .stage .tools { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 6px; opacity: 0; transition: opacity .15s; }
+  .stage:hover .tools { opacity: 1; }
+  .stage .tools button { border: 0; background: rgba(0,0,0,.65); backdrop-filter: blur(6px); color: #fff; font-size: 12px; padding: 5px 9px; border-radius: 6px; display: flex; gap: 5px; align-items: center; }
+  .stage .tools svg { width: 13px; height: 13px; }
+  .stage .placeholder { font-size: 13.5px; }
+  .stage.over { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .gallery .thumbs { margin-top: 10px; }
+  .gallery .thumb { cursor: pointer; width: 76px; height: 57px; }
+  .gallery .thumb.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .info { padding: 22px 24px; display: flex; flex-direction: column; min-width: 0; }
+  .info .cat { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12.5px; }
+  .info .cat svg { width: 14px; height: 14px; }
+  .info h1 { font-size: 24px; letter-spacing: -.5px; margin: 6px 0 2px; line-height: 1.2; }
+  .info .bm { color: var(--text-2); }
+  .info .valbox { margin: 18px 0; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .info .valbox .l { font-size: 12px; color: var(--muted); }
+  .info .valbox .v { font-size: 28px; font-weight: 600; letter-spacing: -.8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .specs { display: grid; grid-template-columns: auto 1fr; margin: 0; border-top: 1px solid var(--border); }
+  .specs dt, .specs dd { padding: 9px 0; border-bottom: 1px solid var(--border); margin: 0; }
+  .specs dt { color: var(--muted); padding-right: 16px; white-space: nowrap; }
+  .specs dd { text-align: right; overflow-wrap: anywhere; }
+  .notes { margin-top: 16px; color: var(--text-2); white-space: pre-wrap; font-size: 13.5px; }
+  .info .acts { display: flex; gap: 8px; margin-top: auto; padding-top: 20px; }
 
-  .toast { position: fixed; bottom: 20px; left: 50%; opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(80px); transition: transform .25s, opacity .25s; background: var(--surface-2); border: 1px solid var(--gold); padding: 10px 16px; border-radius: 10px; z-index: 60; }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: var(--surface-3); border: 1px solid var(--border-strong); padding: 10px 16px; border-radius: 10px; transition: all .2s; z-index: 80; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-  /* Appli desktop macOS : barre de titre intégrée */
-  .desktop-mac header { padding-top: 46px; -webkit-app-region: drag; }
-  .desktop-mac header button, .desktop-mac header input { -webkit-app-region: no-drag; }
-  .desktop-mac body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: 34px; -webkit-app-region: drag; z-index: 40; }
+  /* Desktop app (macOS) : barre de titre intégrée */
+  .desktop-mac aside { padding-top: 52px; }
+  .desktop-mac aside, .desktop-mac .topbar { -webkit-app-region: drag; }
+  .desktop-mac aside button, .desktop-mac .topbar button, .desktop-mac .topbar input { -webkit-app-region: no-drag; }
+  .desktop-mac .topbar { padding-top: 14px; }
 
-  @media (max-width: 560px) {
-    .form, .detail-grid { grid-template-columns: 1fr; }
-    .brand { font-size: 24px; }
-    .stat .value { font-size: 26px; }
-    .search { width: 100%; }
-    .tabs { flex-basis: 100%; }
-    .seg { flex: 1; } .seg button { flex: 1; }
-    .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stat { padding: 14px; }
-    .stat .value { font-size: 22px; }
-    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-    .slot { min-height: 160px; }
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr 1fr; }
+    .hero .kpi.main { grid-column: 1 / -1; }
+    .row2 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 860px) {
+    .detail { grid-template-columns: 1fr; }
+    .gallery { border-right: 0; border-bottom: 1px solid var(--border); }
+  }
+  @media (max-width: 760px) {
+    .app { flex-direction: column; height: auto; }
+    main { overflow: visible; height: auto; }
+    aside { width: auto; height: auto; position: static; padding: 14px 12px 8px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .brand { padding-bottom: 10px; }
+    .nav-label, .side-foot { display: none; }
+    .nav-scroll { overflow-x: auto; overflow-y: hidden; }
+    .nav-scroll, .nav { flex-direction: row; display: flex; gap: 4px; }
+    .nav-item { width: auto; white-space: nowrap; }
+    .nav-item span.n { display: none; }
+    .topbar { padding: 10px 16px; flex-wrap: wrap; }
+    .search { order: 3; flex-basis: 100%; }
+    .search input { width: 100%; }
+    .content { padding: 20px 16px 60px; }
+    .hero .kpi.main .v { font-size: 28px; }
+    .kpi .v { font-size: 20px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+    .slot { min-height: 200px; }
+    .form { grid-template-columns: 1fr; }
+    .overlay { padding: 12px 8px; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">Mon <span>Lifestyle</span></div>
-    <div class="header-actions">
-      <button class="btn" id="btnExport" title="Télécharger une sauvegarde">⬇ Exporter</button>
-      <button class="btn" id="btnImport" title="Restaurer une sauvegarde">⬆ Importer</button>
-      <button class="btn gold" id="btnAddCat">+ Catégorie</button>
-      <input type="file" id="importFile" accept="application/json" hidden>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" class="i"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M10 3 8 9l4 12 4-12-2-6"/></svg></div>
+      <div><b>Lifestyle</b><small>Inventaire privé</small></div>
     </div>
-  </header>
-
-  <div class="stats" id="stats"></div>
-  <div class="breakdown" id="breakdown"></div>
-
-  <div class="toolbar">
-    <div class="tabs" id="tabs"></div>
-    <div class="seg" id="statusFilter">
-      <button data-v="owned" class="active">Possédé</button>
-      <button data-v="wish">Wishlist</button>
-      <button data-v="all">Tout</button>
+    <div class="nav-scroll">
+      <div class="nav" id="navMain"></div>
+      <div class="nav-label">Collections <button data-action="new-cat" title="Nouvelle collection"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button></div>
+      <div class="nav" id="navCats"></div>
     </div>
-    <input class="search" id="search" placeholder="Rechercher…">
-  </div>
+    <div class="side-foot">
+      <button class="nav-item" data-action="export"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>Exporter une sauvegarde</button>
+      <button class="nav-item" data-action="import"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 20h16"/></svg>Importer</button>
+      <button class="nav-item" data-action="open-data" id="btnOpenData" hidden><svg class="i" viewBox="0 0 24 24"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg>Dossier des données</button>
+    </div>
+  </aside>
 
-  <main id="main"></main>
+  <main>
+    <div class="topbar">
+      <div class="crumbs" id="crumbs"></div>
+      <div class="spacer"></div>
+      <label class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="search" placeholder="Rechercher un bien…"></label>
+      <button class="btn primary" data-action="add-item"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Ajouter un bien</button>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
 </div>
 
-<!-- Item modal -->
+<!-- Formulaire bien -->
 <div class="overlay" id="itemOverlay">
   <div class="modal">
-    <h2 id="itemTitle">Ajouter</h2>
-    <form class="form" id="itemForm">
-      <div class="field full"><label>Nom</label><input name="name" required placeholder="ex. Porsche 911 GT3"></div>
-      <div class="field"><label>Catégorie</label><select name="cat" id="itemCat"></select></div>
-      <div class="field"><label>Statut</label>
-        <select name="status">
-          <option value="owned">Possédé</option>
-          <option value="wish">Wishlist / objectif</option>
-          <option value="sold">Vendu</option>
-        </select>
-      </div>
-      <div class="field"><label>Marque / modèle</label><input name="brand" placeholder="ex. Rolex Submariner"></div>
-      <div class="field"><label>Année</label><input name="year" inputmode="numeric" placeholder="ex. 2023"></div>
-      <div class="field"><label>Prix d'achat (€)</label><input name="buyPrice" inputmode="decimal" placeholder="0"></div>
-      <div class="field"><label>Valeur actuelle (€)</label><input name="value" inputmode="decimal" placeholder="0"></div>
-      <div class="field"><label>Date d'achat</label><input name="buyDate" type="date"></div>
-      <div class="field"><label>Lieu / emplacement</label><input name="location" placeholder="ex. Paris, garage, coffre…"></div>
-      <div class="field full"><label>Photo</label>
-        <div class="photo-row">
-          <div class="photo-preview" id="photoPreview"></div>
-          <input name="photoUrl" placeholder="Colle un lien d'image…" style="flex:1">
-          <button type="button" class="btn sm" id="btnUpload">Fichier</button>
-          <input type="file" id="photoFile" accept="image/*" hidden>
+    <div class="modal-head"><h2 id="itemTitle">Ajouter un bien</h2><button class="x" data-action="close"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="modal-body">
+      <form class="form" id="itemForm" autocomplete="off">
+        <div class="field full">
+          <label>Photos</label>
+          <div class="dropzone" id="formDrop">
+            <div class="thumbs" id="formThumbs"></div>
+            <div class="dz-hint">Glisse tes photos ici ou clique sur +. La première photo sert de couverture.</div>
+          </div>
         </div>
-      </div>
-      <div class="field full"><label>Notes</label><textarea name="notes" placeholder="Entretien, numéro de série, assurance…"></textarea></div>
-    </form>
+        <div class="field full"><label>Nom</label><input name="name" required placeholder="ex. Porsche 911 GT3 Touring"></div>
+        <div class="field"><label>Collection</label><select name="cat" id="itemCat"></select></div>
+        <div class="field"><label>Statut</label>
+          <select name="status"><option value="owned">Possédé</option><option value="wish">Wishlist</option><option value="sold">Vendu</option></select>
+        </div>
+        <div class="field"><label>Marque</label><input name="brand"></div>
+        <div class="field"><label>Modèle</label><input name="model"></div>
+        <div class="field"><label>Année</label><input name="year" inputmode="numeric"></div>
+        <div class="field"><label>Emplacement</label><input name="location" placeholder="ex. Paris, garage, coffre"></div>
+        <h4>Valeur</h4>
+        <div class="field"><label>Prix d'achat</label><div class="money"><input name="buyPrice" inputmode="decimal" placeholder="0"></div></div>
+        <div class="field"><label>Valeur actuelle estimée</label><div class="money"><input name="value" inputmode="decimal" placeholder="0"></div></div>
+        <div class="field"><label>Date d'achat</label><input name="buyDate" type="date"></div>
+        <div></div>
+        <h4 id="specsTitle">Caractéristiques</h4>
+        <div class="full form" id="specFields" style="padding:0"></div>
+        <div class="field full"><label>Notes</label><textarea name="notes" placeholder="Entretien, assurance, historique…"></textarea></div>
+      </form>
+    </div>
     <div class="modal-foot">
-      <button class="btn danger" id="btnDeleteItem">Supprimer</button>
-      <div class="right">
-        <button class="btn" data-close>Annuler</button>
-        <button class="btn gold" id="btnSaveItem">Enregistrer</button>
-      </div>
+      <button class="btn danger" data-action="delete-item" id="btnDeleteItem">Supprimer</button>
+      <div class="spacer"></div>
+      <button class="btn ghost" data-action="close">Annuler</button>
+      <button class="btn primary" data-action="save-item">Enregistrer</button>
     </div>
   </div>
 </div>
 
-<!-- Detail modal -->
-<div class="overlay" id="detailOverlay">
-  <div class="modal" id="detailBody"></div>
-</div>
+<!-- Fiche détaillée -->
+<div class="overlay" id="detailOverlay"><div class="modal wide" id="detailBody"></div></div>
 
-<!-- Category modal -->
+<!-- Formulaire collection -->
 <div class="overlay" id="catOverlay">
   <div class="modal">
-    <h2 id="catTitle">Nouvelle catégorie</h2>
-    <form class="form" id="catForm">
-      <div class="field full"><label>Nom</label><input name="name" required placeholder="ex. Sneakers, Art, Crypto…"></div>
-      <div class="field full"><label>Icône</label><div class="emoji-pick" id="emojiPick"></div></div>
-      <div class="field"><label>Couleur</label><input name="color" type="color" value="#c9a45c" style="height:42px;padding:4px"></div>
-    </form>
+    <div class="modal-head"><h2 id="catTitle">Nouvelle collection</h2><button class="x" data-action="close"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="modal-body">
+      <form class="form" id="catForm" autocomplete="off">
+        <div class="field full"><label>Nom de la collection</label><input name="name" required placeholder="ex. Résidences, Garage, Horlogerie…"></div>
+        <div class="field full"><label>Type</label><div class="types" id="typePick"></div></div>
+      </form>
+    </div>
     <div class="modal-foot">
-      <button class="btn danger" id="btnDeleteCat">Supprimer</button>
-      <div class="right">
-        <button class="btn" data-close>Annuler</button>
-        <button class="btn gold" id="btnSaveCat">Enregistrer</button>
-      </div>
+      <button class="btn danger" data-action="delete-cat" id="btnDeleteCat">Supprimer</button>
+      <div class="spacer"></div>
+      <button class="btn ghost" data-action="close">Annuler</button>
+      <button class="btn primary" data-action="save-cat">Enregistrer</button>
     </div>
   </div>
 </div>
 
+<input type="file" id="photoInput" accept="image/*" multiple hidden>
+<input type="file" id="importInput" accept="application/json,.json" hidden>
 <div class="toast" id="toast"></div>
 
 <script>
 (() => {
+  "use strict";
   const KEY = "lifestyle-dashboard-v1";
-  const EMOJIS = ["🏠","🏡","🏢","🏖️","🚗","🏎️","🏍️","🛥️","✈️","⌚","💎","👜","👟","👔","🕶️","🎨","🍷","📱","💻","🎮","📷","🎸","🐎","🏌️","💰","📈","🪙","🏦","🎓","🧳"];
+  const bridge = window.lifestyle || null; // fourni par l'appli desktop
+
+  // ---------- Icônes & types de collection ----------
+  const ICONS = {
+    home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    car: '<path d="M3 13l2-5.2A2 2 0 0 1 6.9 6.5h10.2a2 2 0 0 1 1.9 1.3L21 13v4a1 1 0 0 1-1 1h-1M3 13v4a1 1 0 0 0 1 1h1M3 13h18M9.5 18h5"/><circle cx="7.2" cy="18" r="1.8"/><circle cx="16.8" cy="18" r="1.8"/>',
+    moto: '<circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5 9 10h5l4.5 6.5M14 10l-2-4H9.5M12 16.5h-1L9 10"/>',
+    boat: '<path d="M3 18c1.5 1.2 3 1.2 4.5 0s3-1.2 4.5 0 3 1.2 4.5 0 3-1.2 4.5 0M5 15l-1.5-4h17L18 15M12 11V3l5 4.5h-5"/>',
+    plane: '<path d="M2 16l8.5-3V5.5a1.5 1.5 0 0 1 3 0V13l8.5 3v2l-8.5-2v3.5L16 21v1.5L12 21.3 8 22.5V21l2.5-1.5V16L2 18z"/>',
+    watch: '<circle cx="12" cy="12" r="6"/><path d="M9 6.5 9.6 2h4.8l.6 4.5M9 17.5l.6 4.5h4.8l.6-4.5M12 9.5V12l1.6 1.6"/>',
+    jewel: '<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M10 3 8 9l4 12 4-12-2-6"/>',
+    bag: '<path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9zM9 8V6.5a3 3 0 0 1 6 0V8"/>',
+    fashion: '<path d="M8.5 3 4 5 2 10l3 1.2V21h14v-9.8l3-1.2-2-5-4.5-2a3.5 3.5 0 0 1-7 0z"/>',
+    art: '<rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="8.5" r="1.5"/>',
+    wine: '<path d="M8 2h8l-.4 6.2a3.6 3.6 0 0 1-7.2 0zM12 12v9M8.5 21h7"/>',
+    tech: '<rect x="2" y="4.5" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17.5V21"/>',
+    other: '<path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/>',
+    grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+    star: '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    camera: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>',
+    left: '<path d="m15 6-6 6 6 6"/>', right: '<path d="m9 6 6 6-6 6"/>',
+    up: '<path d="m6 15 6-6 6 6"/>', down: '<path d="m6 9 6 6 6-6"/>',
+    trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+    pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+    edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  };
+  const icon = (k, cls = "i") => `<svg class="${cls}" viewBox="0 0 24 24">${ICONS[k] || ICONS.other}</svg>`;
+
+  const TYPES = {
+    home:    { label: "Immobilier",   fields: [["address","Adresse",1],["surface","Surface (m²)"],["rooms","Pièces"],["kind","Type de bien"],["land","Terrain (m²)"]] },
+    car:     { label: "Automobile",   fields: [["mileage","Kilométrage"],["plate","Immatriculation"],["power","Puissance (ch)"],["color","Couleur"],["vin","N° de châssis (VIN)",1]] },
+    moto:    { label: "Moto",         fields: [["mileage","Kilométrage"],["plate","Immatriculation"],["engine","Cylindrée"],["color","Couleur"]] },
+    boat:    { label: "Nautisme",     fields: [["length","Longueur (m)"],["port","Port d'attache"],["engine","Motorisation"],["flag","Pavillon"]] },
+    plane:   { label: "Aviation",     fields: [["reg","Immatriculation"],["hours","Heures de vol"],["base","Base"],["seats","Places"]] },
+    watch:   { label: "Horlogerie",   fields: [["ref","Référence"],["serial","N° de série"],["size","Diamètre (mm)"],["papers","Boîte & papiers"],["service","Dernière révision"]] },
+    jewel:   { label: "Joaillerie",   fields: [["material","Matière"],["carats","Carats"],["cert","Certificat",1]] },
+    bag:     { label: "Maroquinerie", fields: [["ref","Référence"],["material","Matière"],["color","Couleur"],["size","Taille"]] },
+    fashion: { label: "Mode",         fields: [["size","Taille"],["color","Couleur"],["material","Matière"]] },
+    art:     { label: "Art",          fields: [["artist","Artiste"],["technique","Technique"],["dims","Dimensions"],["cert","Certificat / provenance",1]] },
+    wine:    { label: "Cave",         fields: [["domain","Domaine"],["vintage","Millésime"],["qty","Quantité"],["format","Format"]] },
+    tech:    { label: "Tech",         fields: [["serial","N° de série"],["warranty","Garantie jusqu'au"]] },
+    other:   { label: "Autre",        fields: [] },
+  };
   const DEFAULT_CATS = [
-    { id: "maison",  name: "Maisons",  emoji: "🏠", color: "#c9a45c" },
-    { id: "voiture", name: "Voitures", emoji: "🏎️", color: "#5c8fc9" },
-    { id: "montre",  name: "Montres",  emoji: "⌚", color: "#9a7ad1" },
+    { id: "maison",  name: "Immobilier", type: "home" },
+    { id: "voiture", name: "Garage",     type: "car" },
+    { id: "montre",  name: "Horlogerie", type: "watch" },
   ];
 
-  // ---------- State ----------
-  let state = load();
-  let ui = { cat: "all", status: "owned", q: "", editingItem: null, editingCat: null, pendingPhoto: "" };
-
-  function load() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) {
-        const s = JSON.parse(raw);
-        if (Array.isArray(s.categories) && Array.isArray(s.items)) return s;
-      }
-    } catch (e) {}
-    return { categories: DEFAULT_CATS.slice(), items: [] };
-  }
-  function save() {
-    try { localStorage.setItem(KEY, JSON.stringify(state)); }
-    catch (e) { toast("⚠️ Stockage plein — utilise des liens d'image ou exporte une sauvegarde"); }
-  }
-  const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
-
-  // ---------- Helpers ----------
+  // ---------- Utilitaires ----------
   const $ = (s, r = document) => r.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-  const num = (v) => { const n = parseFloat(String(v ?? "").replace(/\s/g, "").replace(",", ".")); return isFinite(n) ? n : 0; };
+  const num = (v) => { const n = parseFloat(String(v ?? "").replace(/[\s €]/g, "").replace(",", ".")); return isFinite(n) ? n : 0; };
   const eur = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n || 0);
-  const compact = (n) => Math.abs(n) >= 1e6
-    ? new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 }).format(n / 1e6) + " M€"
-    : eur(n);
-  const catById = (id) => state.categories.find(c => c.id === id);
+  const short = (n) => {
+    const a = Math.abs(n);
+    if (a >= 1e6) return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 }).format(n / 1e6) + " M€";
+    if (a >= 1e4) return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(n / 1e3) + " k€";
+    return eur(n);
+  };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const valueOf = (it) => num(it.value) || num(it.buyPrice);
-  const cssUrl = (u) => `url("${String(u).replace(/["\\\n]/g, "")}")`;
-
+  const fmtDate = (d) => d ? new Date(d + "T00:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "";
+  const photoSrc = (ref) => /^(data:|https?:|file:|blob:)/.test(ref) ? ref : "lsphoto://img/" + encodeURIComponent(ref);
+  const deltaPill = (buy, val) => {
+    if (!buy || !val) return "";
+    const d = (val - buy) / buy * 100;
+    const cls = Math.abs(d) < 0.05 ? "flat" : d > 0 ? "up" : "down";
+    return `<span class="pill ${cls}">${d > 0 ? "+" : ""}${d.toFixed(1).replace(".", ",")} %</span>`;
+  };
   function toast(msg) {
     const t = $("#toast"); t.textContent = msg; t.classList.add("show");
     clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2600);
   }
 
-  // ---------- Render ----------
-  function render() { renderStats(); renderBreakdown(); renderTabs(); renderMain(); }
+  // ---------- Données ----------
+  let state = null;
+  const ui = { view: "overview", tab: "owned", q: "", editItem: null, editCat: null, draftPhotos: [], newPhotos: [], detailId: null, detailIdx: 0, photoTarget: null, catType: "home" };
 
-  function renderStats() {
-    const owned = state.items.filter(i => i.status === "owned");
-    const wish = state.items.filter(i => i.status === "wish");
-    const total = owned.reduce((s, i) => s + valueOf(i), 0);
-    const invested = owned.reduce((s, i) => s + num(i.buyPrice), 0);
-    const gain = owned.filter(i => num(i.buyPrice) && num(i.value)).reduce((s, i) => s + num(i.value) - num(i.buyPrice), 0);
-    const wishTotal = wish.reduce((s, i) => s + valueOf(i), 0);
-    const pct = invested ? (gain / invested) * 100 : 0;
-    $("#stats").innerHTML = `
-      <div class="stat"><div class="label">Valeur totale</div><div class="value gold">${compact(total)}</div><div class="sub">${owned.length} bien${owned.length > 1 ? "s" : ""} possédé${owned.length > 1 ? "s" : ""}</div></div>
-      <div class="stat"><div class="label">Plus / moins-value</div><div class="value">${gain >= 0 ? "+" : ""}${compact(gain)}</div><div class="sub ${gain > 0 ? "up" : gain < 0 ? "down" : ""}">${invested ? (pct >= 0 ? "+" : "") + pct.toFixed(1) + " % vs achat" : "Ajoute des prix d'achat"}</div></div>
-      <div class="stat"><div class="label">Investi</div><div class="value">${compact(invested)}</div><div class="sub">Prix d'achat cumulés</div></div>
-      <div class="stat"><div class="label">Wishlist</div><div class="value">${compact(wishTotal)}</div><div class="sub">${wish.length} objectif${wish.length > 1 ? "s" : ""}</div></div>`;
+  function normalize(s) {
+    if (!s || !Array.isArray(s.categories) || !Array.isArray(s.items)) return null;
+    const legacy = { maison: "home", voiture: "car", montre: "watch" };
+    s.categories.forEach(c => { if (!c.type) c.type = legacy[c.id] || "other"; delete c.emoji; delete c.color; });
+    s.items.forEach(it => {
+      if (!Array.isArray(it.photos)) it.photos = it.photo ? [it.photo] : [];
+      delete it.photo;
+      if (!it.specs) it.specs = {};
+    });
+    return s;
   }
-
-  function renderBreakdown() {
-    const owned = state.items.filter(i => i.status === "owned");
-    const total = owned.reduce((s, i) => s + valueOf(i), 0);
-    const rows = state.categories.map(c => ({ c, v: owned.filter(i => i.cat === c.id).reduce((s, i) => s + valueOf(i), 0) }))
-      .filter(r => r.v > 0).sort((a, b) => b.v - a.v);
-    const el = $("#breakdown");
-    if (!total) { el.style.display = "none"; return; }
-    el.style.display = "";
-    el.innerHTML = `<h3>Répartition du patrimoine</h3>
-      <div class="bar">${rows.map(r => `<div style="width:${(r.v / total) * 100}%;background:${esc(r.c.color)}" title="${esc(r.c.name)}"></div>`).join("")}</div>
-      <div class="legend">${rows.map(r => `<span><i style="background:${esc(r.c.color)}"></i>${esc(r.c.emoji)} ${esc(r.c.name)}<b>${compact(r.v)}</b><span class="pct">${Math.round((r.v / total) * 100)} %</span></span>`).join("")}</div>`;
-  }
-
-  function matches(it) {
-    if (ui.status !== "all" && it.status !== ui.status) return false;
-    if (!ui.q) return true;
-    const q = ui.q.toLowerCase();
-    return [it.name, it.brand, it.location, it.notes, it.year].some(v => String(v || "").toLowerCase().includes(q));
-  }
-
-  function renderTabs() {
-    const count = (id) => state.items.filter(i => (id === "all" || i.cat === id) && matches(i)).length;
-    const tabs = [{ id: "all", name: "Tout", emoji: "✦" }, ...state.categories];
-    if (ui.cat !== "all" && !catById(ui.cat)) ui.cat = "all";
-    $("#tabs").innerHTML = tabs.map(c =>
-      `<button class="tab ${ui.cat === c.id ? "active" : ""}" data-cat="${esc(c.id)}">${esc(c.emoji)} ${esc(c.name)}<span class="count">${count(c.id)}</span></button>`
-    ).join("");
-  }
-
-  function cardHtml(it) {
-    const c = catById(it.cat);
-    const img = it.photo ? `style="background-image:${esc(cssUrl(it.photo))}"` : "";
-    const badge = it.status === "wish" ? `<span class="badge wish">Wishlist</span>` : it.status === "sold" ? `<span class="badge sold">Vendu</span>` : "";
-    const bp = num(it.buyPrice), v = num(it.value);
-    const delta = bp && v && it.status === "owned" ? ((v - bp) / bp) * 100 : null;
-    const meta = [it.brand, it.year].filter(Boolean).join(" · ") || it.location || "";
-    return `<div class="card" data-item="${esc(it.id)}">
-      <div class="img" ${img}>${it.photo ? "" : esc(c?.emoji || "✦")}${badge}</div>
-      <div class="body">
-        <div class="name">${esc(it.name)}</div>
-        <div class="meta">${esc(meta)}</div>
-        <div class="price"><b>${valueOf(it) ? eur(valueOf(it)) : "—"}</b>${delta !== null ? `<span class="delta ${delta >= 0 ? "up" : "down"}">${delta >= 0 ? "▲" : "▼"} ${Math.abs(delta).toFixed(1)} %</span>` : ""}</div>
-      </div></div>`;
-  }
-
-  function sectionHtml(c) {
-    const items = state.items.filter(i => i.cat === c.id && matches(i));
-    const total = items.filter(i => i.status === "owned").reduce((s, i) => s + valueOf(i), 0);
-    const hideSlot = ui.q && !items.length;
-    if (hideSlot && ui.cat === "all") return "";
-    return `<section class="section">
-      <div class="section-head">
-        <h2><span class="emoji">${esc(c.emoji)}</span>${esc(c.name)} <small>${items.length} · ${eur(total)}</small></h2>
-        <div class="actions"><button class="btn sm" data-editcat="${esc(c.id)}">Modifier</button></div>
-      </div>
-      <div class="grid">
-        ${items.map(cardHtml).join("")}
-        <button class="slot" data-add="${esc(c.id)}"><div><div class="plus">+</div><div class="t">Ajouter ${ui.status === "wish" ? "un objectif" : "un élément"}</div></div></button>
-      </div></section>`;
-  }
-
-  function renderMain() {
-    const main = $("#main");
-    if (!state.categories.length) {
-      main.innerHTML = `<div class="empty"><h2>Ton dashboard est vide</h2><p>Crée ta première catégorie : maison, voitures, montres, sneakers…</p><button class="btn gold" data-newcat>+ Créer une catégorie</button></div>`;
-      return;
+  async function loadState() {
+    if (bridge) {
+      try { const raw = await bridge.load(); if (raw) { const s = normalize(JSON.parse(raw)); if (s) return s; } } catch (e) { console.error(e); }
     }
-    const cats = ui.cat === "all" ? state.categories : [catById(ui.cat)];
-    const html = cats.map(sectionHtml).join("");
-    main.innerHTML = html || `<div class="empty"><p>Aucun résultat pour « ${esc(ui.q)} »</p></div>`;
+    try { const raw = localStorage.getItem(KEY); if (raw) { const s = normalize(JSON.parse(raw)); if (s) return s; } } catch (e) {}
+    return { categories: DEFAULT_CATS.map(c => ({ ...c })), items: [] };
+  }
+  let saveTimer = null;
+  function save() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      const json = JSON.stringify(state);
+      if (bridge) { try { await bridge.save(json); return; } catch (e) { toast("Erreur d'enregistrement"); console.error(e); } }
+      try { localStorage.setItem(KEY, json); }
+      catch (e) { toast("Stockage du navigateur plein : utilise l'appli desktop pour plus de photos"); }
+    }, 150);
   }
 
-  // ---------- Modals ----------
-  function openOverlay(id) { $(id).classList.add("open"); document.body.style.overflow = "hidden"; }
-  function closeOverlays() { document.querySelectorAll(".overlay").forEach(o => o.classList.remove("open")); document.body.style.overflow = ""; }
+  // Photos : redimensionnées, puis enregistrées en fichiers (appli) ou en données (navigateur)
+  async function storePhoto(file) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+      const max = bridge ? 2400 : 1200;
+      const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const cv = document.createElement("canvas");
+      cv.width = Math.round(img.naturalWidth * k); cv.height = Math.round(img.naturalHeight * k);
+      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+      if (bridge) {
+        const blob = await new Promise(r => cv.toBlob(r, "image/jpeg", 0.9));
+        return await bridge.savePhoto(new Uint8Array(await blob.arrayBuffer()));
+      }
+      return cv.toDataURL("image/jpeg", 0.82);
+    } finally { URL.revokeObjectURL(url); }
+  }
+  function dropPhotoFile(ref) { if (bridge && ref && !/^(data:|https?:)/.test(ref)) bridge.deletePhoto(ref).catch(() => {}); }
+  async function storeFiles(files) {
+    const imgs = [...files].filter(f => f.type.startsWith("image/"));
+    if (!imgs.length) return [];
+    toast(imgs.length > 1 ? `Import de ${imgs.length} photos…` : "Import de la photo…");
+    const refs = [];
+    for (const f of imgs) { try { refs.push(await storePhoto(f)); } catch (e) { console.error(e); toast("Une image n'a pas pu être lue"); } }
+    return refs;
+  }
+
+  // ---------- Sélecteurs ----------
+  const catById = (id) => state.categories.find(c => c.id === id);
+  const itemById = (id) => state.items.find(i => i.id === id);
+  const matchQ = (it) => {
+    if (!ui.q) return true;
+    const q = ui.q.toLowerCase(); const c = catById(it.cat);
+    return [it.name, it.brand, it.model, it.year, it.location, it.notes, c?.name, ...Object.values(it.specs || {})].some(v => String(v || "").toLowerCase().includes(q));
+  };
+  const owned = () => state.items.filter(i => i.status === "owned");
+  function totals(items) {
+    const o = items.filter(i => i.status === "owned");
+    const value = o.reduce((s, i) => s + valueOf(i), 0);
+    const invested = o.reduce((s, i) => s + num(i.buyPrice), 0);
+    const comparable = o.filter(i => num(i.buyPrice) && num(i.value));
+    const gain = comparable.reduce((s, i) => s + num(i.value) - num(i.buyPrice), 0);
+    const base = comparable.reduce((s, i) => s + num(i.buyPrice), 0);
+    return { value, invested, gain, gainPct: base ? gain / base * 100 : null, count: o.length };
+  }
+
+  // ---------- Rendu ----------
+  function render() { renderNav(); renderCrumbs(); renderContent(); }
+
+  function renderNav() {
+    const wishN = state.items.filter(i => i.status === "wish").length;
+    $("#navMain").innerHTML = `
+      <button class="nav-item ${ui.view === "overview" ? "active" : ""}" data-view="overview">${icon("grid")}<span class="name">Vue d'ensemble</span></button>
+      <button class="nav-item ${ui.view === "wish" ? "active" : ""}" data-view="wish">${icon("star")}<span class="name">Wishlist</span><span class="n">${wishN || ""}</span></button>`;
+    $("#navCats").innerHTML = state.categories.map(c => {
+      const n = state.items.filter(i => i.cat === c.id && i.status === "owned").length;
+      return `<button class="nav-item ${ui.view === "cat:" + c.id ? "active" : ""}" data-view="cat:${esc(c.id)}">${icon(c.type)}<span class="name">${esc(c.name)}</span><span class="n">${n || ""}</span></button>`;
+    }).join("");
+  }
+
+  function renderCrumbs() {
+    let t = "Vue d'ensemble";
+    if (ui.view === "wish") t = "Wishlist";
+    else if (ui.view.startsWith("cat:")) t = catById(ui.view.slice(4))?.name || "";
+    $("#crumbs").innerHTML = `<span>Lifestyle</span><span>/</span><b>${esc(t)}</b>`;
+  }
+
+  function cardHtml(it, opts = {}) {
+    const c = catById(it.cat);
+    const cover = it.photos[0];
+    const tag = it.status === "wish" ? `<span class="tag wish">Wishlist</span>` : it.status === "sold" ? `<span class="tag sold">Vendu</span>` : (opts.showCat && c ? `<span class="tag">${esc(c.name)}</span>` : "");
+    const sub = [it.brand, it.model, it.year].filter(Boolean).join(" · ") || it.location || c?.name || "";
+    const v = valueOf(it);
+    return `<div class="card" data-open="${esc(it.id)}" data-drop-item="${esc(it.id)}">
+      <div class="media">
+        ${cover ? `<img src="${esc(photoSrc(cover))}" alt="" loading="lazy" draggable="false">`
+                : `<button class="placeholder" data-add-photo="${esc(it.id)}">${icon(c?.type, "i big")}<span class="add">${icon("camera")}Ajouter une photo</span></button>`}
+        ${tag}
+        ${it.photos.length > 1 ? `<span class="count">${icon("camera")}${it.photos.length}</span>` : ""}
+      </div>
+      <div class="body">
+        <div class="ttl">${esc(it.name)}</div>
+        <div class="sub">${esc(sub)}</div>
+        <div class="foot">
+          <span class="price ${v ? "" : "none"}">${v ? eur(v) : "Valeur non renseignée"}</span>
+          ${it.status === "owned" ? deltaPill(num(it.buyPrice), num(it.value)) : ""}
+        </div>
+      </div>
+    </div>`;
+  }
+  const slotHtml = (catId, label = "Ajouter un bien") =>
+    `<button class="slot" data-action="add-item" data-cat="${esc(catId || "")}"><span class="c">${icon("plus")}</span>${esc(label)}</button>`;
+
+  function renderContent() {
+    const el = $("#content");
+    if (ui.view.startsWith("cat:") && !catById(ui.view.slice(4))) ui.view = "overview";
+    if (ui.view === "overview") el.innerHTML = overviewHtml();
+    else if (ui.view === "wish") el.innerHTML = wishHtml();
+    else el.innerHTML = catHtml(catById(ui.view.slice(4)));
+    if (ui.view === "overview") drawChart();
+  }
+
+  function overviewHtml() {
+    const t = totals(state.items);
+    const wish = state.items.filter(i => i.status === "wish");
+    const wishTotal = wish.reduce((s, i) => s + valueOf(i), 0);
+    const today = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
+    if (!state.categories.length) {
+      return `<div class="empty"><div class="sec-icon">${icon("grid")}</div><h3>Commence ton inventaire</h3><p>Crée ta première collection : immobilier, garage, horlogerie…</p><button class="btn primary" data-action="new-cat">${icon("plus")}Nouvelle collection</button></div>`;
+    }
+
+    const alloc = state.categories.map(c => ({ c, v: totals(state.items.filter(i => i.cat === c.id)).value })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const allocHtml = alloc.length
+      ? `<div class="alloc">${alloc.map(r => `<button class="alloc-row" data-view="cat:${esc(r.c.id)}">
+            <span class="nm">${icon(r.c.type)}<span>${esc(r.c.name)}</span></span>
+            <span class="val">${short(r.v)}<small>${Math.round(r.v / t.value * 100)} %</small></span>
+            <span class="track"><div style="width:${Math.max(2, r.v / alloc[0].v * 100)}%"></div></span></button>`).join("")}</div>`
+      : `<div class="chart-empty">Ajoute des valeurs à tes biens pour voir la répartition.</div>`;
+
+    const filtered = ui.q ? state.items.filter(matchQ) : null;
+    const sections = state.categories.map(c => {
+      let items = state.items.filter(i => i.cat === c.id && i.status === "owned");
+      if (filtered) items = state.items.filter(i => i.cat === c.id && matchQ(i));
+      if (filtered && !items.length) return "";
+      const ct = totals(items);
+      const shown = items.slice().sort((a, b) => valueOf(b) - valueOf(a)).slice(0, 7);
+      return `<section class="sec">
+        <div class="sec-head">
+          <div class="sec-icon">${icon(c.type)}</div>
+          <div><h2>${esc(c.name)}</h2><div class="meta">${ct.count} bien${ct.count > 1 ? "s" : ""} · ${eur(ct.value)}</div></div>
+          <div class="spacer"></div>
+          <button class="btn ghost" data-view="cat:${esc(c.id)}">Tout voir ${icon("right")}</button>
+        </div>
+        <div class="grid">${shown.map(i => cardHtml(i)).join("")}${filtered ? "" : slotHtml(c.id)}</div>
+      </section>`;
+    }).join("");
+
+    return `
+      <h1 class="page-title">Vue d'ensemble</h1>
+      <p class="page-sub">${esc(today.charAt(0).toUpperCase() + today.slice(1))}</p>
+      <div class="hero">
+        <div class="kpi main"><div class="l">Valeur nette estimée</div><div class="v">${eur(t.value)}</div>
+          <div class="s">${t.gainPct !== null ? `<span class="pill ${t.gain >= 0 ? "up" : "down"}">${t.gain >= 0 ? "+" : ""}${eur(t.gain)} · ${t.gainPct >= 0 ? "+" : ""}${t.gainPct.toFixed(1).replace(".", ",")} %</span> depuis l'achat` : "Renseigne prix d'achat et valeur actuelle pour suivre la plus-value"}</div></div>
+        <div class="kpi"><div class="l">Capital investi</div><div class="v">${short(t.invested)}</div><div class="s">Prix d'achat cumulés</div></div>
+        <div class="kpi"><div class="l">Biens possédés</div><div class="v">${t.count}</div><div class="s">${state.categories.length} collection${state.categories.length > 1 ? "s" : ""}</div></div>
+        <div class="kpi"><div class="l">Wishlist</div><div class="v">${short(wishTotal)}</div><div class="s">${wish.length} objectif${wish.length > 1 ? "s" : ""}</div></div>
+      </div>
+      <div class="row2">
+        <div class="panel"><div class="ph"><h3>Évolution du patrimoine</h3><small>Capital acquis par date d'achat, valeur estimée aujourd'hui</small></div><div class="chart" id="chart"></div></div>
+        <div class="panel"><div class="ph"><h3>Répartition</h3><small>par collection</small></div>${allocHtml}</div>
+      </div>
+      ${sections || `<div class="empty"><h3>Aucun résultat</h3><p>Rien ne correspond à « ${esc(ui.q)} ».</p></div>`}`;
+  }
+
+  function catHtml(c) {
+    const all = state.items.filter(i => i.cat === c.id);
+    const t = totals(all);
+    const counts = { owned: 0, wish: 0, sold: 0 }; all.forEach(i => counts[i.status]++);
+    const items = all.filter(i => i.status === ui.tab && matchQ(i)).sort((a, b) => valueOf(b) - valueOf(a));
+    return `
+      <div class="cat-header">
+        <div class="sec-icon">${icon(c.type)}</div>
+        <div><h1 class="page-title">${esc(c.name)}</h1><p class="page-sub">${esc(TYPES[c.type]?.label || "")}</p></div>
+        <div class="spacer"></div>
+        <div class="actions"><button class="btn" data-action="edit-cat" data-cat="${esc(c.id)}">${icon("edit")}Modifier</button></div>
+      </div>
+      <div class="stats-strip">
+        <div class="kpi"><div class="l">Valeur estimée</div><div class="v">${eur(t.value)}</div></div>
+        <div class="kpi"><div class="l">Capital investi</div><div class="v">${eur(t.invested)}</div></div>
+        <div class="kpi"><div class="l">Plus-value latente</div><div class="v">${t.gainPct !== null ? `${t.gain >= 0 ? "+" : ""}${eur(t.gain)}` : "—"}</div>${t.gainPct !== null ? `<div class="s">${deltaPill(1, 1 + t.gainPct / 100)}</div>` : ""}</div>
+        <div class="kpi"><div class="l">Biens</div><div class="v">${t.count}</div></div>
+      </div>
+      <div class="tabs" id="tabs">
+        <button data-tab="owned" class="${ui.tab === "owned" ? "active" : ""}">Possédés ${counts.owned}</button>
+        <button data-tab="wish" class="${ui.tab === "wish" ? "active" : ""}">Wishlist ${counts.wish}</button>
+        <button data-tab="sold" class="${ui.tab === "sold" ? "active" : ""}">Vendus ${counts.sold}</button>
+      </div>
+      <div class="grid">${items.map(i => cardHtml(i)).join("")}${ui.tab === "sold" ? "" : slotHtml(c.id, ui.tab === "wish" ? "Ajouter un objectif" : "Ajouter un bien")}</div>`;
+  }
+
+  function wishHtml() {
+    const items = state.items.filter(i => i.status === "wish" && matchQ(i)).sort((a, b) => valueOf(b) - valueOf(a));
+    const total = items.reduce((s, i) => s + valueOf(i), 0);
+    return `
+      <div class="cat-header">
+        <div class="sec-icon">${icon("star")}</div>
+        <div><h1 class="page-title">Wishlist</h1><p class="page-sub">Tes prochains objectifs</p></div>
+      </div>
+      <div class="stats-strip">
+        <div class="kpi"><div class="l">Budget total</div><div class="v">${eur(total)}</div></div>
+        <div class="kpi"><div class="l">Objectifs</div><div class="v">${items.length}</div></div>
+      </div>
+      <div class="grid">${items.map(i => cardHtml(i, { showCat: true })).join("")}${slotHtml("", "Ajouter un objectif")}</div>`;
+  }
+
+  // ---------- Graphique d'évolution ----------
+  function chartSeries() {
+    const dated = owned().filter(i => i.buyDate && num(i.buyPrice)).sort((a, b) => a.buyDate.localeCompare(b.buyDate));
+    if (!dated.length) return null;
+    const pts = []; let cum = 0;
+    dated.forEach(i => {
+      cum += num(i.buyPrice);
+      const d = new Date(i.buyDate + "T00:00:00").getTime();
+      const last = pts[pts.length - 1];
+      if (last && last.t === d) { last.v = cum; last.label += ", " + i.name; }
+      else pts.push({ t: d, v: cum, label: i.name, kind: "buy" });
+    });
+    const now = Date.now();
+    const current = dated.reduce((s, i) => s + valueOf(i), 0);
+    if (now > pts[pts.length - 1].t) pts.push({ t: now, v: current, label: "Valeur estimée aujourd'hui", kind: "now" });
+    else pts[pts.length - 1].v = current;
+    if (pts.length === 1) pts.unshift({ t: pts[0].t - 864e5 * 30, v: 0, label: "", kind: "start" });
+    return pts;
+  }
+  function drawChart() {
+    const host = $("#chart"); if (!host) return;
+    const pts = chartSeries();
+    if (!pts) { host.outerHTML = `<div class="chart-empty">Renseigne la date et le prix d'achat de tes biens<br>pour voir l'évolution de ton patrimoine.</div>`; return; }
+    const W = host.clientWidth || 600, H = host.clientHeight || 220;
+    const m = { l: 58, r: 12, t: 12, b: 26 };
+    const t0 = pts[0].t, t1 = pts[pts.length - 1].t;
+    const vmax = Math.max(...pts.map(p => p.v)) * 1.1 || 1;
+    const step = niceStep(vmax / 4);
+    const top = Math.ceil(vmax / step) * step;
+    const x = (t) => m.l + (t1 === t0 ? 0.5 : (t - t0) / (t1 - t0)) * (W - m.l - m.r);
+    const y = (v) => m.t + (1 - v / top) * (H - m.t - m.b);
+    // ligne en escalier : le capital change à chaque achat
+    let d = `M${x(pts[0].t)},${y(pts[0].v)}`;
+    for (let i = 1; i < pts.length; i++) {
+      const p = pts[i];
+      d += p.kind === "now" ? ` L${x(p.t)},${y(p.v)}` : ` L${x(p.t)},${y(pts[i - 1].v)} L${x(p.t)},${y(p.v)}`;
+    }
+    const area = d + ` L${x(t1)},${y(0)} L${x(t0)},${y(0)} Z`;
+    let grid = "";
+    for (let v = 0; v <= top + 1e-6; v += step) {
+      grid += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border)" stroke-width="1"/>
+               <text x="${m.l - 10}" y="${y(v) + 4}" text-anchor="end" fill="var(--muted)" font-size="11">${short(v)}</text>`;
+    }
+    const y0 = new Date(t0).getFullYear(), y1 = new Date(t1).getFullYear();
+    const ticks = [];
+    const span = y1 - y0, yStep = span > 12 ? 5 : span > 6 ? 2 : 1;
+    for (let yr = y0 + 1; yr <= y1; yr += yStep) ticks.push(new Date(yr, 0, 1).getTime());
+    const xt = (ticks.length ? ticks : [t0, t1]).map(t => `<text x="${x(t)}" y="${H - 6}" text-anchor="middle" fill="var(--muted)" font-size="11">${ticks.length ? new Date(t).getFullYear() : new Date(t).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })}</text>`).join("");
+    host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du patrimoine">
+      <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8a96a" stop-opacity=".28"/><stop offset="1" stop-color="#c8a96a" stop-opacity="0"/></linearGradient></defs>
+      ${grid}${xt}
+      <path d="${area}" fill="url(#ga)"/>
+      <path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>
+      <line id="cx" y1="${m.t}" y2="${H - m.b}" stroke="var(--border-strong)" stroke-width="1" visibility="hidden"/>
+      <circle id="cdot" r="5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>
+      <rect x="${m.l}" y="0" width="${W - m.l - m.r}" height="${H}" fill="transparent" id="chit"/>
+    </svg><div class="tip" id="ctip"></div>`;
+    const hit = $("#chit", host), tip = $("#ctip", host), cx = $("#cx", host), dot = $("#cdot", host);
+    const hide = () => { tip.style.display = "none"; cx.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); };
+    hit.addEventListener("mousemove", (e) => {
+      const r = host.getBoundingClientRect(); const mx = (e.clientX - r.left) * (W / r.width);
+      let best = pts[0]; pts.forEach(p => { if (Math.abs(x(p.t) - mx) < Math.abs(x(best.t) - mx)) best = p; });
+      if (best.kind === "start") return hide();
+      const px = x(best.t), py = y(best.v);
+      cx.setAttribute("x1", px); cx.setAttribute("x2", px); cx.setAttribute("visibility", "visible");
+      dot.setAttribute("cx", px); dot.setAttribute("cy", py); dot.setAttribute("visibility", "visible");
+      tip.innerHTML = `<b>${eur(best.v)}</b><span>${best.kind === "now" ? "Aujourd'hui" : new Date(best.t).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })} · ${esc(best.kind === "now" ? "valeur estimée" : best.label)}</span>`;
+      tip.style.display = "block"; tip.style.left = (px / W * r.width) + "px"; tip.style.top = (py / H * r.height) + "px";
+    });
+    hit.addEventListener("mouseleave", hide);
+  }
+  function niceStep(raw) {
+    const p = Math.pow(10, Math.floor(Math.log10(raw || 1))); const f = raw / p;
+    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
+  }
+  let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(() => { if (ui.view === "overview") drawChart(); }, 120); });
+
+  // ---------- Modales ----------
+  const open = (id) => { $(id).classList.add("open"); document.body.style.overflow = "hidden"; };
+  function closeAll() {
+    if ($("#itemOverlay").classList.contains("open")) discardNewPhotos();
+    document.querySelectorAll(".overlay").forEach(o => o.classList.remove("open"));
+    document.body.style.overflow = "";
+    ui.detailId = null;
+  }
+  function discardNewPhotos() { ui.newPhotos.forEach(dropPhotoFile); ui.newPhotos = []; }
 
   function openItemForm(item, catId) {
-    ui.editingItem = item ? item.id : null;
-    const f = $("#itemForm");
-    f.reset();
-    $("#itemCat").innerHTML = state.categories.map(c => `<option value="${esc(c.id)}">${esc(c.emoji)} ${esc(c.name)}</option>`).join("");
-    const it = item || { cat: catId || state.categories[0]?.id, status: ui.status === "all" ? "owned" : ui.status };
-    ["name","cat","status","brand","year","buyPrice","value","buyDate","location","notes"].forEach(k => { if (f[k]) f[k].value = it[k] ?? ""; });
-    ui.pendingPhoto = it.photo || "";
-    f.photoUrl.value = ui.pendingPhoto.startsWith("data:") ? "" : ui.pendingPhoto;
-    updatePhotoPreview();
-    $("#itemTitle").textContent = item ? "Modifier" : "Ajouter";
+    document.querySelectorAll(".overlay").forEach(o => o.classList.remove("open"));
+    if (!state.categories.length) { openCatForm(null); return; }
+    ui.editItem = item ? item.id : null;
+    ui.newPhotos = [];
+    const f = $("#itemForm"); f.reset();
+    $("#itemCat").innerHTML = state.categories.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+    const defCat = catId || (ui.view.startsWith("cat:") ? ui.view.slice(4) : state.categories[0].id);
+    const defStatus = ui.view === "wish" || (ui.view.startsWith("cat:") && ui.tab === "wish") ? "wish" : "owned";
+    const it = item || { cat: defCat, status: defStatus, photos: [], specs: {} };
+    ["name","cat","status","brand","model","year","location","buyPrice","value","buyDate","notes"].forEach(k => f[k].value = it[k] ?? "");
+    ui.draftPhotos = [...(it.photos || [])];
+    renderSpecFields(it.specs || {});
+    renderFormThumbs();
+    $("#itemTitle").textContent = item ? "Modifier le bien" : "Ajouter un bien";
     $("#btnDeleteItem").style.visibility = item ? "visible" : "hidden";
-    closeOverlays(); openOverlay("#itemOverlay");
-    setTimeout(() => f.name.focus(), 50);
+    open("#itemOverlay");
+    f.name.focus();
   }
-  function updatePhotoPreview() {
-    $("#photoPreview").style.backgroundImage = ui.pendingPhoto ? cssUrl(ui.pendingPhoto) : "";
+  function renderSpecFields(specs) {
+    const c = catById($("#itemCat").value);
+    const fields = TYPES[c?.type]?.fields || [];
+    $("#specsTitle").style.display = fields.length ? "" : "none";
+    $("#specFields").innerHTML = fields.map(([k, label, full]) =>
+      `<div class="field ${full ? "full" : ""}"><label>${esc(label)}</label><input data-spec="${k}" value="${esc(specs[k] || "")}"></div>`).join("");
   }
-
+  function currentSpecs() {
+    const o = {}; document.querySelectorAll("#specFields [data-spec]").forEach(i => { if (i.value.trim()) o[i.dataset.spec] = i.value.trim(); }); return o;
+  }
+  function renderFormThumbs() {
+    $("#formThumbs").innerHTML = ui.draftPhotos.map((p, i) => `
+      <div class="thumb"><img src="${esc(photoSrc(p))}" alt="">
+        ${i === 0 ? `<span class="cover">Couverture</span>` : ""}
+        <button type="button" class="rm" data-rm-draft="${i}" title="Retirer">${icon("x")}</button></div>`).join("")
+      + `<button type="button" class="thumb add" data-action="pick-form-photos" title="Ajouter des photos">${icon("plus")}</button>`;
+  }
   function saveItem() {
     const f = $("#itemForm");
-    if (!f.name.value.trim()) { f.name.focus(); return; }
+    if (!f.name.value.trim()) { f.name.focus(); f.name.reportValidity(); return; }
     const data = {};
-    ["name","cat","status","brand","year","buyPrice","value","buyDate","location","notes"].forEach(k => data[k] = f[k].value.trim());
-    data.photo = ui.pendingPhoto;
-    if (ui.editingItem) {
-      const it = state.items.find(i => i.id === ui.editingItem);
+    ["name","cat","status","brand","model","year","location","buyPrice","value","buyDate","notes"].forEach(k => data[k] = f[k].value.trim());
+    data.photos = ui.draftPhotos.slice();
+    data.specs = currentSpecs();
+    let it;
+    if (ui.editItem) {
+      it = itemById(ui.editItem);
+      it.photos.filter(p => !data.photos.includes(p)).forEach(dropPhotoFile);
       Object.assign(it, data, { updatedAt: Date.now() });
     } else {
-      state.items.push({ id: uid(), createdAt: Date.now(), ...data });
+      it = { id: uid(), createdAt: Date.now(), ...data };
+      state.items.push(it);
     }
-    save(); closeOverlays(); render(); toast(ui.editingItem ? "Modifié ✓" : "Ajouté ✓");
+    ui.newPhotos = [];
+    const wasEdit = !!ui.editItem;
+    save(); closeAll(); render();
+    toast(wasEdit ? "Modifications enregistrées" : "Bien ajouté");
+    if (wasEdit) openDetail(it.id);
+  }
+  function deleteItem(id) {
+    const it = itemById(id); if (!it) return;
+    if (!confirm(`Supprimer « ${it.name} » ? Ses photos seront aussi supprimées.`)) return;
+    it.photos.forEach(dropPhotoFile);
+    ui.newPhotos.forEach(dropPhotoFile); ui.newPhotos = [];
+    state.items = state.items.filter(i => i.id !== id);
+    save(); closeAll(); render(); toast("Bien supprimé");
   }
 
-  function openDetail(id) {
-    const it = state.items.find(i => i.id === id); if (!it) return;
+  function openDetail(id, idx = 0) {
+    const it = itemById(id); if (!it) return;
+    ui.detailId = id; ui.detailIdx = Math.min(idx, Math.max(0, it.photos.length - 1));
     const c = catById(it.cat);
     const bp = num(it.buyPrice), v = num(it.value);
-    const fmtDate = it.buyDate ? new Date(it.buyDate).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "";
+    const specDefs = TYPES[c?.type]?.fields || [];
     const rows = [
-      ["Catégorie", c ? `${c.emoji} ${c.name}` : "—"],
-      ["Statut", { owned: "Possédé", wish: "Wishlist", sold: "Vendu" }[it.status] || "—"],
-      ["Marque / modèle", it.brand], ["Année", it.year],
-      ["Prix d'achat", bp ? eur(bp) : ""], ["Valeur actuelle", v ? eur(v) : ""],
-      ["Plus-value", bp && v ? `${v - bp >= 0 ? "+" : ""}${eur(v - bp)} (${(((v - bp) / bp) * 100).toFixed(1)} %)` : ""],
-      ["Date d'achat", fmtDate], ["Emplacement", it.location],
+      ["Statut", { owned: "Possédé", wish: "Wishlist", sold: "Vendu" }[it.status]],
+      ["Marque", it.brand], ["Modèle", it.model], ["Année", it.year],
+      ...specDefs.map(([k, l]) => [l, it.specs?.[k]]),
+      ["Prix d'achat", bp ? eur(bp) : ""],
+      ["Plus-value", bp && v && it.status === "owned" ? `${v - bp >= 0 ? "+" : ""}${eur(v - bp)}` : ""],
+      ["Date d'achat", fmtDate(it.buyDate)],
+      ["Emplacement", it.location],
     ].filter(r => r[1]);
+    const p = it.photos;
+    const cur = p[ui.detailIdx];
     $("#detailBody").innerHTML = `
-      <div class="detail-img" ${it.photo ? `style="background-image:${esc(cssUrl(it.photo))}"` : ""}>${it.photo ? "" : esc(c?.emoji || "✦")}</div>
-      <h2>${esc(it.name)}</h2>
-      <div class="detail-grid">${rows.map(([k, val]) => `<div><div class="k">${esc(k)}</div>${esc(val)}</div>`).join("")}</div>
-      ${it.notes ? `<div class="detail-notes">${esc(it.notes)}</div>` : ""}
-      <div class="modal-foot"><div class="right"><button class="btn" data-close>Fermer</button><button class="btn gold" data-edititem="${esc(it.id)}">Modifier</button></div></div>`;
-    openOverlay("#detailOverlay");
+      <div class="modal-head"><h2>${esc(c?.name || "")}</h2><button class="x" data-action="close">${icon("x")}</button></div>
+      <div class="detail">
+        <div class="gallery">
+          <div class="stage" id="stage" data-drop-item="${esc(it.id)}">
+            ${cur ? `<img src="${esc(photoSrc(cur))}" alt="">` : `<button class="placeholder" data-add-photo="${esc(it.id)}">${icon(c?.type, "i big")}<span class="add">${icon("camera")}Ajouter des photos</span><span>ou glisse-les ici</span></button>`}
+            ${p.length > 1 ? `<button class="nav-arrow prev" data-step="-1">${icon("left")}</button><button class="nav-arrow next" data-step="1">${icon("right")}</button>` : ""}
+            ${cur ? `<div class="tools">${ui.detailIdx > 0 ? `<button data-action="set-cover">${icon("star")}Couverture</button>` : ""}<button data-action="del-photo">${icon("trash")}Supprimer</button></div>` : ""}
+          </div>
+          <div class="thumbs">${p.map((ph, i) => `<div class="thumb ${i === ui.detailIdx ? "sel" : ""}" data-idx="${i}"><img src="${esc(photoSrc(ph))}" alt="" loading="lazy"></div>`).join("")}
+            <button class="thumb add" data-add-photo="${esc(it.id)}" title="Ajouter des photos">${icon("plus")}</button></div>
+        </div>
+        <div class="info">
+          <div class="cat">${icon(c?.type)}${esc(c?.name || "")}</div>
+          <h1>${esc(it.name)}</h1>
+          <div class="bm">${esc([it.brand, it.model].filter(Boolean).join(" ") || "")}</div>
+          <div class="valbox"><div class="l">${it.status === "wish" ? "Prix cible" : "Valeur estimée"}</div>
+            <div class="v">${valueOf(it) ? eur(valueOf(it)) : "—"} ${it.status === "owned" ? deltaPill(bp, v) : ""}</div></div>
+          ${rows.length ? `<dl class="specs">${rows.map(([k, val]) => `<dt>${esc(k)}</dt><dd>${esc(val)}</dd>`).join("")}</dl>` : ""}
+          ${it.notes ? `<div class="notes">${esc(it.notes)}</div>` : ""}
+          <div class="acts">
+            <button class="btn primary" data-action="edit-item" data-id="${esc(it.id)}">${icon("edit")}Modifier</button>
+            <button class="btn danger" data-action="delete-item-detail" data-id="${esc(it.id)}">${icon("trash")}Supprimer</button>
+          </div>
+        </div>
+      </div>`;
+    if (!$("#detailOverlay").classList.contains("open")) open("#detailOverlay");
+  }
+
+  async function addPhotosToItem(id, files) {
+    const it = itemById(id); if (!it) return;
+    const refs = await storeFiles(files); if (!refs.length) return;
+    const wasEmpty = !it.photos.length;
+    it.photos.push(...refs); save(); render();
+    toast(refs.length > 1 ? `${refs.length} photos ajoutées` : "Photo ajoutée");
+    if (ui.detailId === id) openDetail(id, wasEmpty ? 0 : it.photos.length - refs.length);
   }
 
   function openCatForm(cat) {
-    ui.editingCat = cat ? cat.id : null;
-    const f = $("#catForm"); f.reset();
-    f.name.value = cat?.name || "";
-    f.color.value = cat?.color || ["#c9a45c","#5c8fc9","#9a7ad1","#5cc9a0","#c95c7a","#c9875c"][state.categories.length % 6];
-    const chosen = cat?.emoji || EMOJIS[0];
-    $("#emojiPick").innerHTML = EMOJIS.map(e => `<button type="button" class="${e === chosen ? "active" : ""}" data-emoji="${e}">${e}</button>`).join("");
-    $("#catTitle").textContent = cat ? "Modifier la catégorie" : "Nouvelle catégorie";
+    ui.editCat = cat ? cat.id : null;
+    ui.catType = cat?.type || "home";
+    const f = $("#catForm"); f.reset(); f.name.value = cat?.name || "";
+    renderTypes();
+    $("#catTitle").textContent = cat ? "Modifier la collection" : "Nouvelle collection";
     $("#btnDeleteCat").style.visibility = cat ? "visible" : "hidden";
-    openOverlay("#catOverlay");
-    setTimeout(() => f.name.focus(), 50);
+    open("#catOverlay");
+    f.name.focus();
   }
-
+  function renderTypes() {
+    $("#typePick").innerHTML = Object.entries(TYPES).map(([k, t]) =>
+      `<button type="button" class="type ${ui.catType === k ? "active" : ""}" data-type="${k}">${icon(k)}${esc(t.label)}</button>`).join("");
+  }
   function saveCat() {
-    const f = $("#catForm");
-    const name = f.name.value.trim(); if (!name) { f.name.focus(); return; }
-    const emoji = $("#emojiPick .active")?.dataset.emoji || "✦";
-    if (ui.editingCat) Object.assign(catById(ui.editingCat), { name, emoji, color: f.color.value });
-    else { const id = uid(); state.categories.push({ id, name, emoji, color: f.color.value }); ui.cat = id; }
-    save(); closeOverlays(); render();
+    const f = $("#catForm"); const name = f.name.value.trim();
+    if (!name) { f.name.focus(); f.name.reportValidity(); return; }
+    if (ui.editCat) Object.assign(catById(ui.editCat), { name, type: ui.catType });
+    else { const id = uid(); state.categories.push({ id, name, type: ui.catType }); ui.view = "cat:" + id; ui.tab = "owned"; }
+    save(); closeAll(); render();
   }
-
   function deleteCat() {
-    const c = catById(ui.editingCat); if (!c) return;
-    const n = state.items.filter(i => i.cat === c.id).length;
-    if (!confirm(`Supprimer « ${c.name} »${n ? ` et ses ${n} élément(s)` : ""} ?`)) return;
+    const c = catById(ui.editCat); if (!c) return;
+    const items = state.items.filter(i => i.cat === c.id);
+    if (!confirm(`Supprimer la collection « ${c.name} »${items.length ? ` et ses ${items.length} bien(s)` : ""} ?`)) return;
+    items.forEach(i => i.photos.forEach(dropPhotoFile));
     state.categories = state.categories.filter(x => x.id !== c.id);
     state.items = state.items.filter(i => i.cat !== c.id);
-    save(); closeOverlays(); render();
+    ui.view = "overview"; save(); closeAll(); render();
   }
 
-  // Resize uploaded images so they fit in browser storage
-  function readImage(file) {
-    return new Promise((resolve, reject) => {
-      const r = new FileReader();
-      r.onload = () => {
-        const img = new Image();
-        img.onload = () => {
-          const max = 900, k = Math.min(1, max / Math.max(img.width, img.height));
-          const cv = document.createElement("canvas");
-          cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
-          cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
-          resolve(cv.toDataURL("image/jpeg", 0.8));
-        };
-        img.onerror = reject; img.src = r.result;
-      };
-      r.onerror = reject; r.readAsDataURL(file);
-    });
+  // ---------- Sauvegarde / import ----------
+  async function exportData() {
+    toast("Préparation de la sauvegarde…");
+    const copy = JSON.parse(JSON.stringify(state));
+    if (bridge) for (const it of copy.items) it.photos = await Promise.all(it.photos.map(p => /^(data:|https?:)/.test(p) ? p : bridge.readPhoto(p).catch(() => null))).then(a => a.filter(Boolean));
+    const json = JSON.stringify({ app: "lifestyle", version: 2, exportedAt: new Date().toISOString(), ...copy });
+    const name = `lifestyle-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
+    if (bridge?.exportFile) { const ok = await bridge.exportFile(name, json); if (ok) toast("Sauvegarde enregistrée"); return; }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([json], { type: "application/json" })); a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+  async function importData(file) {
+    try {
+      const s = normalize(JSON.parse(await file.text()));
+      if (!s) throw new Error("format");
+      if (!confirm("Remplacer toutes les données actuelles par cette sauvegarde ?")) return;
+      if (bridge) {
+        toast("Import des photos…");
+        for (const it of s.items) it.photos = await Promise.all(it.photos.map(async p => {
+          if (!p.startsWith("data:")) return p;
+          const buf = new Uint8Array(await (await fetch(p)).arrayBuffer());
+          return bridge.savePhoto(buf);
+        }));
+      }
+      state = { categories: s.categories, items: s.items };
+      ui.view = "overview"; save(); render(); toast("Sauvegarde restaurée");
+    } catch (e) { console.error(e); toast("Fichier de sauvegarde invalide"); }
   }
 
-  // ---------- Events ----------
-  document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-cat],[data-add],[data-item],[data-editcat],[data-edititem],[data-close],[data-newcat],[data-emoji]");
-    if (!t) { if (e.target.classList.contains("overlay")) closeOverlays(); return; }
-    const d = t.dataset;
-    if (d.cat) { ui.cat = d.cat; renderTabs(); renderMain(); }
-    else if (d.add) openItemForm(null, d.add);
-    else if (d.item) openDetail(d.item);
-    else if (d.editcat) openCatForm(catById(d.editcat));
-    else if (d.edititem) openItemForm(state.items.find(i => i.id === d.edititem));
-    else if ("close" in d) closeOverlays();
-    else if ("newcat" in d) openCatForm(null);
-    else if (d.emoji) { document.querySelectorAll("#emojiPick button").forEach(b => b.classList.toggle("active", b === t)); }
+  // ---------- Événements ----------
+  document.addEventListener("click", async (e) => {
+    const t = e.target;
+    const addPhoto = t.closest("[data-add-photo]");
+    if (addPhoto) { e.stopPropagation(); ui.photoTarget = addPhoto.dataset.addPhoto; $("#photoInput").click(); return; }
+    const rmDraft = t.closest("[data-rm-draft]");
+    if (rmDraft) { const i = +rmDraft.dataset.rmDraft; const [ref] = ui.draftPhotos.splice(i, 1); if (ui.newPhotos.includes(ref)) { dropPhotoFile(ref); ui.newPhotos = ui.newPhotos.filter(r => r !== ref); } renderFormThumbs(); return; }
+    const view = t.closest("[data-view]");
+    if (view) { ui.view = view.dataset.view; ui.tab = "owned"; render(); $("main").scrollTop = 0; window.scrollTo(0, 0); return; }
+    const tab = t.closest("[data-tab]");
+    if (tab) { ui.tab = tab.dataset.tab; renderContent(); return; }
+    const type = t.closest("[data-type]");
+    if (type) { ui.catType = type.dataset.type; renderTypes(); const f = $("#catForm"); if (!f.name.value.trim()) f.name.placeholder = TYPES[ui.catType].label; return; }
+    const idx = t.closest("[data-idx]");
+    if (idx) { openDetail(ui.detailId, +idx.dataset.idx); return; }
+    const stepB = t.closest("[data-step]");
+    if (stepB) { const it = itemById(ui.detailId); const n = it.photos.length; openDetail(ui.detailId, (ui.detailIdx + +stepB.dataset.step + n) % n); return; }
+
+    const act = t.closest("[data-action]");
+    if (act) {
+      const a = act.dataset.action;
+      if (a === "close") closeAll();
+      else if (a === "add-item") openItemForm(null, act.dataset.cat || null);
+      else if (a === "save-item") saveItem();
+      else if (a === "delete-item") deleteItem(ui.editItem);
+      else if (a === "delete-item-detail") deleteItem(act.dataset.id);
+      else if (a === "edit-item") openItemForm(itemById(act.dataset.id));
+      else if (a === "new-cat") openCatForm(null);
+      else if (a === "edit-cat") openCatForm(catById(act.dataset.cat));
+      else if (a === "save-cat") saveCat();
+      else if (a === "delete-cat") deleteCat();
+      else if (a === "pick-form-photos") { ui.photoTarget = "__form"; $("#photoInput").click(); }
+      else if (a === "export") exportData();
+      else if (a === "import") $("#importInput").click();
+      else if (a === "open-data") bridge?.openDataFolder();
+      else if (a === "set-cover") { const it = itemById(ui.detailId); const [ph] = it.photos.splice(ui.detailIdx, 1); it.photos.unshift(ph); save(); render(); openDetail(it.id, 0); toast("Photo de couverture mise à jour"); }
+      else if (a === "del-photo") { const it = itemById(ui.detailId); if (!confirm("Supprimer cette photo ?")) return; const [ph] = it.photos.splice(ui.detailIdx, 1); dropPhotoFile(ph); save(); render(); openDetail(it.id, Math.max(0, ui.detailIdx - 1)); }
+      return;
+    }
+    const card = t.closest("[data-open]");
+    if (card) { openDetail(card.dataset.open); return; }
+    if (t.classList.contains("overlay")) closeAll();
   });
+
+  $("#itemCat").addEventListener("change", () => renderSpecFields(currentSpecs()));
+  $("#photoInput").addEventListener("change", async (e) => {
+    const files = [...e.target.files]; e.target.value = "";
+    if (ui.photoTarget === "__form") {
+      const refs = await storeFiles(files); ui.draftPhotos.push(...refs); ui.newPhotos.push(...refs); renderFormThumbs();
+    } else if (ui.photoTarget) addPhotosToItem(ui.photoTarget, files);
+  });
+  $("#importInput").addEventListener("change", (e) => { const f = e.target.files[0]; e.target.value = ""; if (f) importData(f); });
+  $("#search").addEventListener("input", (e) => { ui.q = e.target.value.trim(); renderContent(); });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeOverlays();
+    if (e.key === "Escape") closeAll();
+    if (ui.detailId && !$("#itemOverlay").classList.contains("open") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+      const n = itemById(ui.detailId)?.photos.length || 0; if (n > 1) openDetail(ui.detailId, (ui.detailIdx + (e.key === "ArrowRight" ? 1 : -1) + n) % n);
+    }
     if (e.key === "Enter" && e.target.tagName === "INPUT") {
       if (e.target.closest("#itemForm")) { e.preventDefault(); saveItem(); }
       if (e.target.closest("#catForm")) { e.preventDefault(); saveCat(); }
     }
   });
 
-  $("#btnAddCat").onclick = () => openCatForm(null);
-  $("#btnSaveItem").onclick = saveItem;
-  $("#btnSaveCat").onclick = saveCat;
-  $("#btnDeleteCat").onclick = deleteCat;
-  $("#btnDeleteItem").onclick = () => {
-    const it = state.items.find(i => i.id === ui.editingItem);
-    if (it && confirm(`Supprimer « ${it.name} » ?`)) {
-      state.items = state.items.filter(i => i.id !== it.id);
-      save(); closeOverlays(); render(); toast("Supprimé");
-    }
-  };
-  $("#itemForm").photoUrl.addEventListener("input", (e) => { ui.pendingPhoto = e.target.value.trim(); updatePhotoPreview(); });
-  $("#btnUpload").onclick = () => $("#photoFile").click();
-  $("#photoFile").onchange = async (e) => {
-    const file = e.target.files[0]; if (!file) return;
-    try { ui.pendingPhoto = await readImage(file); $("#itemForm").photoUrl.value = ""; updatePhotoPreview(); }
-    catch { toast("Image illisible"); }
-    e.target.value = "";
-  };
+  // Glisser-déposer des photos sur une carte, la fiche ou le formulaire
+  const dropTarget = (e) => e.target.closest?.("[data-drop-item], #formDrop");
+  let lastOver = null;
+  const clearOver = () => { lastOver?.classList.remove("drop", "over"); lastOver = null; };
+  document.addEventListener("dragover", (e) => {
+    if (!e.dataTransfer?.types?.includes("Files")) return;
+    e.preventDefault();
+    const z = dropTarget(e);
+    if (z !== lastOver) { clearOver(); if (z) { z.classList.add(z.classList.contains("card") ? "drop" : "over"); lastOver = z; } }
+    e.dataTransfer.dropEffect = z ? "copy" : "none";
+  });
+  document.addEventListener("dragleave", (e) => { if (!e.relatedTarget) clearOver(); });
+  document.addEventListener("drop", async (e) => {
+    e.preventDefault(); const z = dropTarget(e); clearOver();
+    if (!z || !e.dataTransfer.files.length) return;
+    if (z.id === "formDrop") { const refs = await storeFiles(e.dataTransfer.files); ui.draftPhotos.push(...refs); ui.newPhotos.push(...refs); renderFormThumbs(); }
+    else addPhotosToItem(z.dataset.dropItem, e.dataTransfer.files);
+  });
 
-  $("#statusFilter").onclick = (e) => {
-    const b = e.target.closest("button"); if (!b) return;
-    ui.status = b.dataset.v;
-    document.querySelectorAll("#statusFilter button").forEach(x => x.classList.toggle("active", x === b));
-    renderTabs(); renderMain();
-  };
-  $("#search").oninput = (e) => { ui.q = e.target.value.trim(); renderTabs(); renderMain(); };
-
-  $("#btnExport").onclick = () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `lifestyle-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  };
-  $("#btnImport").onclick = () => $("#importFile").click();
-  $("#importFile").onchange = async (e) => {
-    const file = e.target.files[0]; if (!file) return;
-    try {
-      const s = JSON.parse(await file.text());
-      if (!Array.isArray(s.categories) || !Array.isArray(s.items)) throw 0;
-      if (!confirm("Remplacer toutes tes données actuelles par cette sauvegarde ?")) return;
-      state = s; save(); render(); toast("Sauvegarde importée ✓");
-    } catch { toast("Fichier invalide"); }
-    e.target.value = "";
-  };
-
-  render();
+  // ---------- Démarrage ----------
+  (async () => {
+    state = await loadState();
+    if (bridge) { $("#btnOpenData").hidden = false; save(); }
+    render();
+  })();
 })();
 </script>
 </body>

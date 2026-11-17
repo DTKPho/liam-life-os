@@ -1,16 +1,21 @@
 # Mon Lifestyle
 
-Dashboard personnel de ton lifestyle : tu crées des catégories (maisons, voitures,
-montres, sneakers, art…) et tu ajoutes toi-même chaque élément dans ses slots.
+Inventaire privé de ton lifestyle : tu crées tes collections (immobilier, garage,
+horlogerie, joaillerie, art, cave…) et tu ajoutes toi-même chaque bien avec **tes propres photos**.
 
-- **Chiffres clés** : valeur totale, plus/moins-value vs prix d'achat, montant investi, total de la wishlist
-- **Répartition** du patrimoine par catégorie
-- **Fiches** : nom, marque/modèle, année, prix d'achat, valeur actuelle, date, emplacement, photo (lien ou fichier), notes
-- **Statuts** : possédé, wishlist / objectif, vendu
-- **Recherche**, filtres par catégorie et statut
-- **Sauvegarde** : export / import JSON (bouton en haut à droite)
+- **Vue d'ensemble** : valeur nette, plus-value depuis l'achat, capital investi, wishlist,
+  courbe d'évolution du patrimoine (par date d'achat) et répartition par collection
+- **Photos** : plusieurs par bien, glisser-déposer sur une carte, la fiche ou le formulaire ;
+  la première sert de couverture. Dans l'appli Mac elles sont enregistrées en fichiers
+  (pas de limite de place)
+- **Fiches complètes** : marque, modèle, année, prix d'achat, valeur actuelle, date, emplacement,
+  notes + caractéristiques selon le type (surface et adresse pour l'immobilier, kilométrage
+  et immatriculation pour une voiture, référence et n° de série pour une montre…)
+- **Statuts** : possédé, wishlist, vendu
+- **Recherche** sur tous les champs
+- **Sauvegarde** : export / import d'un fichier unique (photos incluses)
 
-Les données restent sur ton ordinateur, rien n'est envoyé en ligne.
+Les données restent sur ton ordinateur (menu « Dossier des données »), rien n'est envoyé en ligne.
 
 ## Installer l'appli sur Mac
 
