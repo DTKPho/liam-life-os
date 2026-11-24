@@ -23,6 +23,7 @@
     --down: #e06c62;
     --radius: 12px;
     --side-w: 248px;
+    --serif: "Didot", "Bodoni 72", "Playfair Display", "Iowan Old Style", "Times New Roman", Georgia, serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
@@ -275,6 +276,188 @@
 
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: var(--surface-3); border: 1px solid var(--border-strong); padding: 10px 16px; border-radius: 10px; transition: all .2s; z-index: 80; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ================= Ambiances immersives ================= */
+  .serif { font-family: var(--serif); font-weight: 400; }
+  main { --glow: 200,169,106; background: radial-gradient(1100px 520px at 75% -5%, rgba(var(--glow), .09), transparent 65%) fixed, var(--bg); transition: background .6s; }
+  .content.enter > * { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+  .content.enter > *:nth-child(2) { animation-delay: .05s; } .content.enter > *:nth-child(3) { animation-delay: .1s; } .content.enter > *:nth-child(n+4) { animation-delay: .15s; }
+  .content.enter .theme > * { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+  .content.enter .theme > *:nth-child(2) { animation-delay: .08s; } .content.enter .theme > *:nth-child(3) { animation-delay: .16s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+  @keyframes kb { from { transform: scale(1.09); } to { transform: scale(1); } }
+  .kicker { font-size: 11px; letter-spacing: 2.6px; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+
+  .ov-head { margin-bottom: 4px; }
+  .ov-title { font-size: 44px; margin: 4px 0 0; letter-spacing: -.3px; line-height: 1.1; }
+  .sec-head h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; letter-spacing: -.2px; }
+
+  /* Héros plein cadre */
+  .hero-x { position: relative; margin: -28px -32px 26px; height: 420px; overflow: hidden; background: #0b0b0c; }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kb 20s ease-out both; }
+  .hero-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end; padding-right: 7%;
+    background: radial-gradient(70% 110% at 85% 0%, rgba(var(--glow), .30), transparent 62%), radial-gradient(50% 80% at 10% 100%, rgba(var(--glow), .08), transparent 70%), linear-gradient(160deg, #19191e, #0b0b0c); }
+  .hero-empty svg { width: 260px; height: 260px; fill: none; stroke: rgba(var(--glow), .30); stroke-width: .5; stroke-linecap: round; stroke-linejoin: round; }
+  .hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,11,12,.45) 0%, rgba(11,11,12,0) 30%, rgba(11,11,12,.25) 55%, rgba(11,11,12,.96) 100%), linear-gradient(90deg, rgba(11,11,12,.55), transparent 55%); }
+  .hero-top { position: absolute; top: 22px; right: 32px; display: flex; gap: 8px; z-index: 2; }
+  .hero-in { position: absolute; left: 32px; right: 32px; bottom: 30px; z-index: 2; }
+  .hero-title { font-family: var(--serif); font-weight: 400; font-size: 64px; letter-spacing: -.5px; line-height: 1.02; margin: 8px 0 20px; text-shadow: 0 2px 30px rgba(0,0,0,.45); max-width: 70%; }
+  .hero-stats { display: flex; gap: 30px; flex-wrap: wrap; }
+  .hero-stats div { display: flex; flex-direction: column; gap: 2px; padding-left: 14px; border-left: 1px solid rgba(255,255,255,.2); }
+  .hero-stats span { font-size: 11.5px; color: rgba(255,255,255,.62); }
+  .hero-stats b { font-size: 19px; font-weight: 600; display: flex; gap: 8px; align-items: center; letter-spacing: -.2px; }
+  .hero-feature { position: absolute; right: 32px; bottom: 32px; z-index: 2; display: flex; align-items: center; gap: 10px; color: #fff; font-size: 13px;
+    background: rgba(10,10,12,.45); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 9px 12px; max-width: 34%; }
+  .hero-feature span { color: var(--accent); font-size: 10.5px; letter-spacing: 1.6px; text-transform: uppercase; white-space: nowrap; }
+  .hero-feature svg { width: 14px; height: 14px; }
+  .hero-feature:hover { background: rgba(10,10,12,.7); border-color: var(--accent); }
+  .btn.glass { background: rgba(10,10,12,.42); backdrop-filter: blur(12px); border-color: rgba(255,255,255,.18); color: #fff; }
+  .btn.glass:hover { background: rgba(10,10,12,.7); }
+  .theme .tabs { margin-bottom: 22px; }
+  .tag { z-index: 2; }
+  .theme .tag { position: absolute; top: 12px; left: 12px; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 6px; background: rgba(10,10,12,.72); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.08); }
+  .theme .tag.wish { color: var(--accent); }
+
+  /* Univers (vue d'ensemble) */
+  .rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 34px; }
+  .room { position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); padding: 0; background: #0f0f11; text-align: left; color: #fff; transition: border-color .2s, transform .2s; }
+  .room:hover { border-color: rgba(var(--glow), .6); transform: translateY(-2px); }
+  .room img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+  .room:hover img { transform: scale(1.06); }
+  .room-empty { position: absolute; inset: 0; display: flex; align-items: flex-start; justify-content: flex-end; padding: 18px 22px;
+    background: radial-gradient(90% 120% at 90% 0%, rgba(var(--glow), .28), transparent 60%), linear-gradient(160deg, #1a1a1f, #0d0d0f); }
+  .room-empty svg { width: 120px; height: 120px; fill: none; stroke: rgba(var(--glow), .4); stroke-width: .6; stroke-linecap: round; stroke-linejoin: round; transition: transform .8s; }
+  .room:hover .room-empty svg { transform: scale(1.06) rotate(-2deg); }
+  .room-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,10,0) 35%, rgba(8,8,10,.9) 100%); }
+  .room-in { position: absolute; left: 22px; right: 70px; bottom: 20px; }
+  .room-in h3 { font-size: 32px; margin: 4px 0 4px; line-height: 1.05; }
+  .room-meta { font-size: 12.5px; color: rgba(255,255,255,.72); }
+  .room-go { position: absolute; right: 20px; bottom: 22px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.28); display: grid; place-items: center; transition: all .2s; }
+  .room:hover .room-go { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .room-new { background: transparent; border: 1px dashed var(--border-strong); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--muted); }
+  .room-new b { color: var(--text); font-weight: 600; font-size: 15px; }
+  .room-new .c { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--border-strong); display: grid; place-items: center; margin-bottom: 6px; }
+  .room-new:hover { border-color: var(--accent); }
+  .room-new:hover .c { border-color: var(--accent); color: var(--accent); }
+
+  /* Slots communs aux ambiances */
+  [class*="slot-"] { min-height: 0; }
+
+  /* Immobilier */
+  .estate { display: grid; grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); gap: 24px; }
+  .listing { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s; }
+  .listing:hover { border-color: rgba(var(--glow), .5); transform: translateY(-3px); box-shadow: 0 24px 50px rgba(0,0,0,.35); }
+  .l-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface-2); }
+  .l-media img, .car-media img, .b-media img, .m img, .cushion img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+  .listing:hover .l-media img { transform: scale(1.04); }
+  .l-price { position: absolute; left: 16px; bottom: 16px; background: rgba(10,10,12,.66); backdrop-filter: blur(10px); padding: 7px 13px; border-radius: 9px; font-weight: 600; font-size: 17px; letter-spacing: -.2px; z-index: 2; }
+  .l-body { padding: 18px 22px 20px; }
+  .l-loc { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 12.5px; }
+  .l-loc svg { width: 14px; height: 14px; }
+  .listing h3 { font-size: 28px; margin: 6px 0 14px; line-height: 1.1; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chips span { font-size: 12px; padding: 4px 11px; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--text-2); }
+  .l-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12.5px; min-height: 44px; }
+  .slot-estate { min-height: 420px; border-radius: 16px; }
+
+  /* Showroom (garage, hangar, vitrine) */
+  .showroom { position: relative; border-radius: 20px; padding: 40px 34px 46px; overflow: hidden; border: 1px solid var(--border);
+    background: radial-gradient(55% 55% at 50% -5%, rgba(var(--glow), .20), transparent 70%), linear-gradient(180deg, #131317 0%, #0b0b0d 58%, #141417 100%); }
+  .showroom::before { content: ""; position: absolute; inset: auto 0 0 0; height: 42%; pointer-events: none;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.028) 0 1px, transparent 1px 140px), linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.03));
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 40%); border-top: 1px solid rgba(255,255,255,.04); }
+  .floor-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 46px 30px; }
+  .car { cursor: pointer; }
+  .car-media { position: relative; aspect-ratio: 16 / 9; }
+  .car-media img { border-radius: 12px; -webkit-box-reflect: below 6px linear-gradient(transparent 74%, rgba(255,255,255,.14)); box-shadow: 0 30px 50px -20px rgba(0,0,0,.8); }
+  .car:hover .car-media img { transform: translateY(-5px); }
+  .car-media .placeholder { border-radius: 12px; border: 1px solid rgba(255,255,255,.06); }
+  .car-body { padding: 40px 4px 0; }
+  .car-brand { font-size: 11px; letter-spacing: 2.6px; text-transform: uppercase; color: var(--accent); min-height: 16px; }
+  .car h3 { font-size: 30px; margin: 4px 0 8px; line-height: 1.05; }
+  .car-specs { display: flex; flex-wrap: wrap; gap: 4px 0; color: var(--text-2); font-size: 13px; }
+  .car-specs span:not(:last-child)::after { content: "·"; margin: 0 10px; color: var(--muted); }
+  .car-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 16px; }
+  .plate { display: inline-flex; align-items: stretch; background: #f5f5f2; color: #111; border-radius: 4px; overflow: hidden; border: 1px solid #9a9a9a; box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+  .plate i { background: #1d4aa8; color: #fff; font-style: normal; font-size: 9px; font-weight: 700; padding: 0 4px 3px; display: flex; align-items: flex-end; }
+  .plate b { padding: 5px 9px; font: 700 13px/1 "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: 1.2px; text-transform: uppercase; }
+  .car-price { font-size: 18px; font-weight: 600; letter-spacing: -.2px; display: flex; gap: 8px; align-items: center; }
+  .slot-showroom { min-height: 330px; border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.015); }
+
+  /* Écrin (horlogerie, joaillerie, maroquinerie, mode) */
+  .vault { border-radius: 22px; padding: 30px; background: linear-gradient(180deg, #1d1712, #120e0b);
+    border: 1px solid #3b2f23; box-shadow: inset 0 0 0 6px #16110d, inset 0 0 0 7px rgba(200,169,106,.32), inset 0 30px 70px rgba(0,0,0,.6); }
+  .vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; }
+  .cell { position: relative; background: linear-gradient(180deg, #231b15, #17120e); border-radius: 16px; padding: 22px 16px 18px; text-align: center; cursor: pointer;
+    box-shadow: inset 0 2px 12px rgba(0,0,0,.65), 0 1px 0 rgba(255,255,255,.04); transition: transform .2s, box-shadow .2s; }
+  .cell:hover { transform: translateY(-3px); box-shadow: inset 0 2px 12px rgba(0,0,0,.65), 0 0 0 1px rgba(200,169,106,.4), 0 18px 40px rgba(0,0,0,.4); }
+  .cushion { position: relative; width: 80%; margin: 0 auto 16px; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+    background: radial-gradient(circle at 50% 35%, #3b2d21, #19130e); box-shadow: inset 0 8px 20px rgba(0,0,0,.75), 0 10px 26px rgba(0,0,0,.45), 0 0 0 1px rgba(200,169,106,.18); }
+  .cushion .placeholder { background: radial-gradient(circle at 50% 35%, #3b2d21, #19130e); font-size: 11px; }
+  .cushion .placeholder svg.big { color: rgba(200,169,106,.45); }
+  .cell:hover .cushion img { transform: scale(1.05); }
+  .engr { font-size: 10.5px; letter-spacing: 2.8px; text-transform: uppercase; color: var(--accent); min-height: 15px; }
+  .cell h3 { font-size: 21px; margin: 4px 0 2px; line-height: 1.15; }
+  .ref { font: 11.5px "SF Mono", ui-monospace, Menlo, monospace; color: #9b8b78; letter-spacing: .6px; min-height: 16px; }
+  .cell-val { margin-top: 12px; font-weight: 600; display: flex; gap: 6px; justify-content: center; align-items: center; min-height: 22px; }
+  .slot-vault { min-height: 320px; border-radius: 16px; border-color: rgba(200,169,106,.3); color: #9b8b78; }
+
+  /* Cave */
+  .cellar { border-radius: 20px; padding: 28px; border: 1px solid #2f1d1d;
+    background: radial-gradient(70% 60% at 50% -10%, rgba(var(--glow), .26), transparent 70%), linear-gradient(180deg, #1a1010, #0d0909); }
+  .rack { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); border-top: 1px solid #3c2727; border-left: 1px solid #3c2727; }
+  .bottle { position: relative; border-right: 1px solid #3c2727; border-bottom: 1px solid #3c2727; padding: 18px 16px; cursor: pointer; text-align: center;
+    background: linear-gradient(180deg, rgba(0,0,0,.3), transparent 40%); transition: background .2s; }
+  .bottle:hover { background: radial-gradient(80% 60% at 50% 0%, rgba(230,160,110,.12), transparent 70%); }
+  .b-media { position: relative; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: #140c0c; margin-bottom: 14px; box-shadow: 0 12px 30px rgba(0,0,0,.5); }
+  .bottle:hover .b-media img { transform: scale(1.04); }
+  .b-cap b { font-family: var(--serif); font-size: 26px; font-weight: 400; color: #d9b583; display: block; min-height: 30px; }
+  .b-cap span { display: block; font-weight: 600; }
+  .b-cap small { display: block; color: #a08a80; font-size: 12px; }
+  .b-cap em { display: block; font-style: normal; margin-top: 6px; font-size: 12.5px; color: var(--text-2); }
+  .slot-cellar { border: 0; border-right: 1px solid #3c2727; border-bottom: 1px solid #3c2727; border-radius: 0; min-height: 320px; color: #a08a80; }
+
+  /* Galerie */
+  .wall { border-radius: 20px; padding: 56px 40px 46px; border: 1px solid var(--border);
+    background: radial-gradient(80% 50% at 50% 0%, rgba(var(--glow), .07), transparent 70%), linear-gradient(180deg, #1c1b19, #131211); }
+  .wall-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 60px 44px; align-items: start; }
+  .artwork { position: relative; cursor: pointer; }
+  .artwork::before { content: ""; position: absolute; left: 0; right: 0; top: -56px; height: 160px; pointer-events: none; background: radial-gradient(45% 100% at 50% 0%, rgba(255,240,215,.16), transparent 75%); }
+  .frame { background: #0c0b0a; padding: 10px; box-shadow: 0 22px 44px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.07); transition: transform .25s; }
+  .artwork:hover .frame { transform: translateY(-4px); }
+  .mat { background: #f1eee7; padding: 18px; }
+  .m { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #ddd; box-shadow: inset 0 1px 4px rgba(0,0,0,.25); }
+  .label { margin-top: 20px; background: #f1eee7; color: #1a1a1a; padding: 10px 13px; font-size: 12px; line-height: 1.45; width: max-content; max-width: 100%; border-radius: 2px; box-shadow: 0 4px 12px rgba(0,0,0,.35); }
+  .label b { display: block; font-size: 12.5px; }
+  .label i { display: block; font-family: var(--serif); font-size: 14px; }
+  .label span { display: block; color: #5b574f; }
+  .label .lv { color: #1a1a1a; font-weight: 600; margin-top: 3px; }
+  .slot-gallery { min-height: 380px; border-color: rgba(255,255,255,.14); }
+
+  /* Fiche : fond flouté de la photo */
+  #detailOverlay { --bgimg: none; overflow-x: hidden; }
+  .b-media .placeholder { background: radial-gradient(120% 90% at 50% 0%, #2a1616, #140c0c); }
+  .b-media .placeholder svg.big { color: rgba(217,181,131,.4); }
+  #detailOverlay::before { content: ""; position: fixed; inset: -60px; background: var(--bgimg) center / cover no-repeat; filter: blur(50px) saturate(1.2) brightness(.42); z-index: -1; }
+  .info h1 { font-family: var(--serif); font-weight: 400; font-size: 34px; letter-spacing: -.3px; }
+
+  @media (max-width: 760px) {
+    .hero-x { margin: -20px -16px 20px; height: 330px; }
+    .hero-top { top: 14px; right: 16px; }
+    .hero-in { left: 16px; right: 16px; bottom: 20px; }
+    .hero-title { font-size: 40px; max-width: 100%; }
+    .hero-stats { gap: 16px; }
+    .hero-stats b { font-size: 15px; }
+    .hero-feature { display: none; }
+    .ov-title { font-size: 34px; }
+    .rooms, .estate, .floor-grid { grid-template-columns: 1fr; }
+    .showroom, .vault, .cellar { padding: 18px; }
+    .wall { padding: 40px 18px 30px; }
+    .vault-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .rack { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .wall-grid { grid-template-columns: 1fr 1fr; gap: 40px 20px; }
+    .car h3, .listing h3 { font-size: 24px; }
+  }
 
   /* Desktop app (macOS) : barre de titre intégrée */
   .desktop-mac aside { padding-top: 52px; }
@@ -638,6 +821,121 @@
     else if (ui.view === "wish") el.innerHTML = wishHtml();
     else el.innerHTML = catHtml(catById(ui.view.slice(4)));
     if (ui.view === "overview") drawChart();
+    const c = ui.view.startsWith("cat:") ? catById(ui.view.slice(4)) : null;
+    $("main").style.setProperty("--glow", c ? themeOf(c).glow : "200,169,106");
+    if (ui.lastView !== ui.view) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); ui.lastView = ui.view; }
+  }
+
+  // ---------- Ambiances par type de collection ----------
+  const THEMES = {
+    home:     { layout: "estate",   kicker: "Portfolio immobilier", one: "propriété", many: "propriétés", add: "Ajouter une propriété", glow: "200,169,106" },
+    car:      { layout: "showroom", kicker: "Showroom privé", one: "véhicule", many: "véhicules", add: "Ajouter un véhicule", glow: "120,150,200" },
+    moto:     { layout: "showroom", kicker: "Garage moto", one: "moto", many: "motos", add: "Ajouter une moto", glow: "200,120,90" },
+    boat:     { layout: "showroom", kicker: "Flotte privée", one: "bateau", many: "bateaux", add: "Ajouter un bateau", glow: "80,150,200" },
+    plane:    { layout: "showroom", kicker: "Hangar privé", one: "appareil", many: "appareils", add: "Ajouter un appareil", glow: "150,165,190" },
+    sneakers: { layout: "showroom", kicker: "Vitrine", one: "paire", many: "paires", add: "Ajouter une paire", glow: "210,130,90" },
+    watch:    { layout: "vault",    kicker: "Coffre horloger", one: "garde-temps", many: "garde-temps", add: "Ajouter une montre", glow: "200,169,106" },
+    jewel:    { layout: "vault",    kicker: "Écrin", one: "pièce", many: "pièces", add: "Ajouter un bijou", glow: "190,150,210" },
+    bag:      { layout: "vault",    kicker: "Maroquinerie", one: "pièce", many: "pièces", add: "Ajouter une pièce", glow: "200,140,100" },
+    fashion:  { layout: "vault",    kicker: "Dressing", one: "pièce", many: "pièces", add: "Ajouter une pièce", glow: "170,160,150" },
+    art:      { layout: "gallery",  kicker: "Galerie privée", one: "œuvre", many: "œuvres", add: "Ajouter une œuvre", glow: "230,210,180" },
+    wine:     { layout: "cellar",   kicker: "La cave", one: "référence", many: "références", add: "Ajouter une bouteille", glow: "170,60,70" },
+  };
+  const themeOf = (c) => ({ layout: "grid", one: "bien", many: "biens", add: "Ajouter un bien", glow: "200,169,106", ...(THEMES[c?.type] || {}), kicker: THEMES[c?.type]?.kicker || TYPES[c?.type]?.label || "Collection" });
+  const plural = (n, th) => `${n} ${n > 1 ? th.many : th.one}`;
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  const coverOf = (items) => items.filter(i => i.photos.length).sort((a, b) => valueOf(b) - valueOf(a))[0];
+  const imgOrPh = (it, c) => it.photos[0]
+    ? `<img src="${esc(photoSrc(it.photos[0]))}" alt="" loading="lazy" draggable="false">`
+    : `<button class="placeholder" data-add-photo="${esc(it.id)}">${icon(c?.type, "i big")}<span class="add">${icon("camera")}Ajouter une photo</span></button>`;
+  const statusTag = (it) => it.status === "wish" ? `<span class="tag wish">Wishlist</span>` : it.status === "sold" ? `<span class="tag sold">Vendu</span>` : "";
+  const ownedDelta = (it) => it.status === "owned" ? deltaPill(num(it.buyPrice), num(it.value)) : "";
+  const dataAttrs = (it) => `data-open="${esc(it.id)}" data-drop-item="${esc(it.id)}"`;
+
+  function heroHtml({ kicker, title, img, iconKey, stats, actions, feature }) {
+    return `<header class="hero-x">
+      ${img ? `<img class="hero-img" src="${esc(photoSrc(img))}" alt="">` : `<div class="hero-empty">${icon(iconKey)}</div>`}
+      <div class="hero-shade"></div>
+      ${actions ? `<div class="hero-top">${actions}</div>` : ""}
+      <div class="hero-in">
+        <div class="kicker">${esc(kicker)}</div>
+        <h1 class="hero-title">${esc(title)}</h1>
+        <div class="hero-stats">${stats.map(([l, v]) => `<div><span>${esc(l)}</span><b>${v}</b></div>`).join("")}</div>
+      </div>
+      ${feature ? `<button class="hero-feature" data-open="${esc(feature.id)}"><span>En vedette</span>${esc(feature.name)}${icon("right")}</button>` : ""}
+    </header>`;
+  }
+
+  // Immobilier : annonces façon agence de prestige
+  function estateCard(it, c) {
+    const s = it.specs || {}; const v = valueOf(it);
+    const chips = [s.kind, s.surface && `${s.surface} m²`, s.rooms && `${s.rooms} pièces`, s.land && `Terrain ${s.land} m²`].filter(Boolean);
+    const since = it.buyDate ? `Acquise en ${it.buyDate.slice(0, 4)}` : it.year ? `Construite en ${it.year}` : "";
+    return `<article class="listing" ${dataAttrs(it)}>
+      <div class="l-media">${imgOrPh(it, c)}${statusTag(it)}${v ? `<span class="l-price">${eur(v)}</span>` : ""}</div>
+      <div class="l-body">
+        <div class="l-loc">${icon("pin")}<span>${esc(s.address || it.location || "Adresse à renseigner")}</span></div>
+        <h3 class="serif">${esc(it.name)}</h3>
+        ${chips.length ? `<div class="chips">${chips.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : ""}
+        <div class="l-foot"><span>${esc(since)}</span>${ownedDelta(it)}</div>
+      </div></article>`;
+  }
+  // Garage / hangar / vitrine : showroom avec reflet au sol
+  function showroomCard(it, c) {
+    const s = it.specs || {}; const v = valueOf(it);
+    const specs = [it.model, it.year, s.mileage, s.power && `${s.power} ch`, s.engine, s.length && `${s.length} m`, s.hours && `${s.hours} h de vol`, s.size && `Pointure ${s.size}`, s.colorway || s.color].filter(Boolean);
+    const plate = s.plate || s.reg;
+    return `<article class="car" ${dataAttrs(it)}>
+      <div class="car-media">${imgOrPh(it, c)}${statusTag(it)}</div>
+      <div class="car-body">
+        <div class="car-brand">${esc(it.brand || TYPES[c?.type]?.label || "")}</div>
+        <h3 class="serif">${esc(it.name)}</h3>
+        <div class="car-specs">${specs.map(x => `<span>${esc(x)}</span>`).join("")}</div>
+        <div class="car-foot">${plate ? `<span class="plate"><i>F</i><b>${esc(plate)}</b></span>` : "<span></span>"}<span class="car-price">${v ? eur(v) : ""} ${ownedDelta(it)}</span></div>
+      </div></article>`;
+  }
+  // Horlogerie / bijoux / maroquinerie : écrin
+  function vaultCell(it, c) {
+    const s = it.specs || {}; const v = valueOf(it);
+    return `<article class="cell" ${dataAttrs(it)}>
+      <div class="cushion">${imgOrPh(it, c)}</div>
+      ${statusTag(it)}
+      <div class="engr">${esc(it.brand || "")}</div>
+      <h3 class="serif">${esc(it.name)}</h3>
+      <div class="ref">${esc(s.ref || it.model || s.material || "")}</div>
+      <div class="cell-val">${v ? eur(v) : ""} ${ownedDelta(it)}</div>
+    </article>`;
+  }
+  // Cave : casier
+  function bottleCard(it, c) {
+    const s = it.specs || {}; const v = valueOf(it);
+    return `<article class="bottle" ${dataAttrs(it)}>
+      <div class="b-media">${imgOrPh(it, c)}${statusTag(it)}</div>
+      <div class="b-cap"><b>${esc(s.vintage || it.year || "")}</b><span>${esc(it.name)}</span><small>${esc(s.domain || it.brand || "")}</small>
+      <em>${esc([s.qty && `${s.qty} bt`, s.format].filter(Boolean).join(" · "))}${v ? ` · ${eur(v)}` : ""}</em></div>
+    </article>`;
+  }
+  // Art : mur de galerie
+  function artCard(it, c) {
+    const s = it.specs || {}; const v = valueOf(it);
+    return `<article class="artwork" ${dataAttrs(it)}>
+      <div class="frame"><div class="mat"><div class="m">${imgOrPh(it, c)}${statusTag(it)}</div></div></div>
+      <div class="label"><b>${esc(s.artist || it.brand || "Artiste")}</b><i>${esc(it.name)}</i>
+        <span>${esc([it.year, s.technique, s.dims].filter(Boolean).join(", "))}</span>${v ? `<span class="lv">${eur(v)}</span>` : ""}</div>
+    </article>`;
+  }
+
+  function layoutHtml(layout, items, c, addLabel) {
+    const add = addLabel ? `<button class="slot slot-${layout}" data-action="add-item" data-cat="${esc(c.id)}"><span class="c">${icon("plus")}</span>${esc(addLabel)}</button>` : "";
+    if (!items.length && !add) return `<div class="empty"><p>Rien ici pour l'instant.</p></div>`;
+    switch (layout) {
+      case "estate":   return `<div class="estate">${items.map(i => estateCard(i, c)).join("")}${add}</div>`;
+      case "showroom": return `<div class="showroom"><div class="floor-grid">${items.map(i => showroomCard(i, c)).join("")}${add}</div></div>`;
+      case "vault":    return `<div class="vault"><div class="vault-grid">${items.map(i => vaultCell(i, c)).join("")}${add}</div></div>`;
+      case "cellar":   return `<div class="cellar"><div class="rack">${items.map(i => bottleCard(i, c)).join("")}${add}</div></div>`;
+      case "gallery":  return `<div class="wall"><div class="wall-grid">${items.map(i => artCard(i, c)).join("")}${add}</div></div>`;
+      default:         return `<div class="grid">${items.map(i => cardHtml(i)).join("")}${add}</div>`;
+    }
   }
 
   function overviewHtml() {
@@ -649,6 +947,13 @@
     if (!state.categories.length) {
       return `<div class="empty"><div class="sec-icon">${icon("grid")}</div><h3>Commence ton inventaire</h3><p>Crée ta première collection : immobilier, garage, horlogerie…</p><button class="btn primary" data-action="new-cat">${icon("plus")}Nouvelle collection</button></div>`;
     }
+    const intro = `<div class="ov-head"><div><div class="kicker">${esc(cap(today))}</div><h1 class="ov-title serif">Mon lifestyle</h1></div></div>`;
+
+    if (ui.q) {
+      const res = state.items.filter(matchQ).sort((a, b) => valueOf(b) - valueOf(a));
+      return intro + `<div class="sec-head"><h2>${res.length} résultat${res.length > 1 ? "s" : ""} pour « ${esc(ui.q)} »</h2></div>
+        ${res.length ? `<div class="grid">${res.map(i => cardHtml(i, { showCat: true })).join("")}</div>` : `<div class="empty"><p>Aucun bien ne correspond.</p></div>`}`;
+    }
 
     const alloc = state.categories.map(c => ({ c, v: totals(state.items.filter(i => i.cat === c.id)).value })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
     const allocHtml = alloc.length
@@ -658,27 +963,23 @@
             <span class="track"><div style="width:${Math.max(2, r.v / alloc[0].v * 100)}%"></div></span></button>`).join("")}</div>`
       : `<div class="chart-empty">Ajoute des valeurs à tes biens pour voir la répartition.</div>`;
 
-    const filtered = ui.q ? state.items.filter(matchQ) : null;
-    const sections = state.categories.map(c => {
-      let items = state.items.filter(i => i.cat === c.id && i.status === "owned");
-      if (filtered) items = state.items.filter(i => i.cat === c.id && matchQ(i));
-      if (filtered && !items.length) return "";
-      const ct = totals(items);
-      const shown = items.slice().sort((a, b) => valueOf(b) - valueOf(a)).slice(0, 7);
-      return `<section class="sec">
-        <div class="sec-head">
-          <div class="sec-icon">${icon(c.type)}</div>
-          <div><h2>${esc(c.name)}</h2><div class="meta">${ct.count} bien${ct.count > 1 ? "s" : ""} · ${eur(ct.value)}</div></div>
-          <div class="spacer"></div>
-          <button class="btn ghost" data-view="cat:${esc(c.id)}">Tout voir ${icon("right")}</button>
-        </div>
-        <div class="grid">${shown.map(i => cardHtml(i)).join("")}${filtered ? "" : slotHtml(c.id)}</div>
-      </section>`;
-    }).join("");
+    const rooms = state.categories.map(c => {
+      const th = themeOf(c);
+      const all = state.items.filter(i => i.cat === c.id);
+      const ct = totals(all);
+      const feat = coverOf(all.filter(i => i.status === "owned")) || coverOf(all);
+      return `<button class="room" data-view="cat:${esc(c.id)}" style="--glow:${th.glow}">
+        ${feat ? `<img src="${esc(photoSrc(feat.photos[0]))}" alt="" loading="lazy">` : `<div class="room-empty">${icon(c.type)}</div>`}
+        <div class="room-shade"></div>
+        <div class="room-in"><span class="kicker">${esc(th.kicker)}</span><h3 class="serif">${esc(c.name)}</h3>
+          <span class="room-meta">${plural(ct.count, th)}${ct.value ? ` · ${short(ct.value)}` : ""}</span></div>
+        <span class="room-go">${icon("right")}</span>
+      </button>`;
+    }).join("") + `<button class="room room-new" data-action="new-cat"><span class="c">${icon("plus")}</span><b>Nouvelle collection</b><span>Sneakers, art, cave, bateau…</span></button>`;
 
-    return `
-      <h1 class="page-title">Vue d'ensemble</h1>
-      <p class="page-sub">${esc(today.charAt(0).toUpperCase() + today.slice(1))}</p>
+    const recent = owned().slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 4);
+
+    return `${intro}
       <div class="hero">
         <div class="kpi main"><div class="l">Valeur nette estimée</div><div class="v">${eur(t.value)}</div>
           <div class="s">${t.gainPct !== null ? `<span class="pill ${t.gain >= 0 ? "up" : "down"}">${t.gain >= 0 ? "+" : ""}${eur(t.gain)} · ${t.gainPct >= 0 ? "+" : ""}${t.gainPct.toFixed(1).replace(".", ",")} %</span> depuis l'achat` : "Renseigne prix d'achat et valeur actuelle pour suivre la plus-value"}</div></div>
@@ -686,55 +987,46 @@
         <div class="kpi"><div class="l">Biens possédés</div><div class="v">${t.count}</div><div class="s">${state.categories.length} collection${state.categories.length > 1 ? "s" : ""}</div></div>
         <div class="kpi"><div class="l">Wishlist</div><div class="v">${short(wishTotal)}</div><div class="s">${wish.length} objectif${wish.length > 1 ? "s" : ""}</div></div>
       </div>
+      <div class="sec-head"><h2>Mes univers</h2></div>
+      <div class="rooms">${rooms}</div>
       <div class="row2">
         <div class="panel"><div class="ph"><h3>Évolution du patrimoine</h3><small>Capital acquis par date d'achat, valeur estimée aujourd'hui</small></div><div class="chart" id="chart"></div></div>
         <div class="panel"><div class="ph"><h3>Répartition</h3><small>par collection</small></div>${allocHtml}</div>
       </div>
-      ${sections || `<div class="empty"><h3>Aucun résultat</h3><p>Rien ne correspond à « ${esc(ui.q)} ».</p></div>`}
-      ${ui.q ? "" : `<button class="new-cat" data-action="new-cat"><span class="c">${icon("plus")}</span>
-        <span><b>Créer une nouvelle collection</b>Sneakers, art, cave à vin, bateau, investissements… tout ce que tu veux suivre.</span>
-        <span class="ex">${["sneakers","art","wine","boat","jewel"].map(k => `<span>${icon(k)}${esc(TYPES[k].label)}</span>`).join("")}</span></button>`}`;
+      ${recent.length ? `<div class="sec-head"><h2>Derniers ajouts</h2></div><div class="grid">${recent.map(i => cardHtml(i, { showCat: true })).join("")}</div>` : ""}`;
   }
 
   function catHtml(c) {
+    const th = themeOf(c);
     const all = state.items.filter(i => i.cat === c.id);
     const t = totals(all);
     const counts = { owned: 0, wish: 0, sold: 0 }; all.forEach(i => counts[i.status]++);
     const items = all.filter(i => i.status === ui.tab && matchQ(i)).sort((a, b) => valueOf(b) - valueOf(a));
-    return `
-      <div class="cat-header">
-        <div class="sec-icon">${icon(c.type)}</div>
-        <div><h1 class="page-title">${esc(c.name)}</h1><p class="page-sub">${esc(TYPES[c.type]?.label || "")}</p></div>
-        <div class="spacer"></div>
-        <div class="actions"><button class="btn" data-action="edit-cat" data-cat="${esc(c.id)}">${icon("edit")}Modifier</button></div>
-      </div>
-      <div class="stats-strip">
-        <div class="kpi"><div class="l">Valeur estimée</div><div class="v">${eur(t.value)}</div></div>
-        <div class="kpi"><div class="l">Capital investi</div><div class="v">${eur(t.invested)}</div></div>
-        <div class="kpi"><div class="l">Plus-value latente</div><div class="v">${t.gainPct !== null ? `${t.gain >= 0 ? "+" : ""}${eur(t.gain)}` : "—"}</div>${t.gainPct !== null ? `<div class="s">${deltaPill(1, 1 + t.gainPct / 100)}</div>` : ""}</div>
-        <div class="kpi"><div class="l">Biens</div><div class="v">${t.count}</div></div>
-      </div>
-      <div class="tabs" id="tabs">
+    const feat = coverOf(all.filter(i => i.status === "owned")) || coverOf(all);
+    const stats = [["Valeur estimée", eur(t.value)], [cap(th.many), String(t.count)]];
+    stats.push(t.gainPct !== null ? ["Plus-value", `${t.gain >= 0 ? "+" : ""}${eur(t.gain)} ${deltaPill(1, 1 + t.gainPct / 100)}`] : ["Capital investi", t.invested ? eur(t.invested) : "—"]);
+    const addLabel = ui.tab === "wish" ? "Ajouter un objectif" : th.add;
+    const actions = `<button class="btn glass" data-action="edit-cat" data-cat="${esc(c.id)}">${icon("edit")}Modifier</button>
+      <button class="btn primary" data-action="add-item" data-cat="${esc(c.id)}">${icon("plus")}${esc(addLabel)}</button>`;
+    return `<div class="theme theme-${th.layout}">
+      ${heroHtml({ kicker: th.kicker, title: c.name, img: feat?.photos[0], iconKey: c.type, stats, actions, feature: feat })}
+      <div class="tabs">
         <button data-tab="owned" class="${ui.tab === "owned" ? "active" : ""}">Possédés ${counts.owned}</button>
         <button data-tab="wish" class="${ui.tab === "wish" ? "active" : ""}">Wishlist ${counts.wish}</button>
         <button data-tab="sold" class="${ui.tab === "sold" ? "active" : ""}">Vendus ${counts.sold}</button>
       </div>
-      <div class="grid">${items.map(i => cardHtml(i)).join("")}${ui.tab === "sold" ? "" : slotHtml(c.id, ui.tab === "wish" ? "Ajouter un objectif" : "Ajouter un bien")}</div>`;
+      ${layoutHtml(th.layout, items, c, ui.tab === "sold" ? null : addLabel)}
+    </div>`;
   }
 
   function wishHtml() {
     const items = state.items.filter(i => i.status === "wish" && matchQ(i)).sort((a, b) => valueOf(b) - valueOf(a));
     const total = items.reduce((s, i) => s + valueOf(i), 0);
-    return `
-      <div class="cat-header">
-        <div class="sec-icon">${icon("star")}</div>
-        <div><h1 class="page-title">Wishlist</h1><p class="page-sub">Tes prochains objectifs</p></div>
-      </div>
-      <div class="stats-strip">
-        <div class="kpi"><div class="l">Budget total</div><div class="v">${eur(total)}</div></div>
-        <div class="kpi"><div class="l">Objectifs</div><div class="v">${items.length}</div></div>
-      </div>
-      <div class="grid">${items.map(i => cardHtml(i, { showCat: true })).join("")}${slotHtml("", "Ajouter un objectif")}</div>`;
+    const feat = coverOf(items);
+    return `<div class="theme">
+      ${heroHtml({ kicker: "Prochains objectifs", title: "Wishlist", img: feat?.photos[0], iconKey: "star", stats: [["Budget total", eur(total)], ["Objectifs", String(items.length)]], feature: feat })}
+      <div class="grid">${items.map(i => cardHtml(i, { showCat: true })).join("")}${slotHtml("", "Ajouter un objectif")}</div>
+    </div>`;
   }
 
   // ---------- Graphique d'évolution ----------
@@ -934,6 +1226,7 @@
           </div>
         </div>
       </div>`;
+    $("#detailOverlay").style.setProperty("--bgimg", cur ? `url("${photoSrc(cur).replace(/["\\\n]/g, "")}")` : "none");
     if (!$("#detailOverlay").classList.contains("open")) open("#detailOverlay");
   }
 
