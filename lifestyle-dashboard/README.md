@@ -3,17 +3,18 @@
 Inventaire privé de ton lifestyle : tu crées tes collections (immobilier, garage,
 horlogerie, joaillerie, art, cave…) et tu ajoutes toi-même chaque bien avec **tes propres photos**.
 
-- **Vue d'ensemble** : valeur nette, plus-value depuis l'achat, capital investi, wishlist,
-  courbe d'évolution du patrimoine (par date d'achat) et répartition par collection
-- **Photos** : plusieurs par bien, glisser-déposer sur une carte, la fiche ou le formulaire ;
-  la première sert de couverture. Dans l'appli Mac elles sont enregistrées en fichiers
-  (pas de limite de place)
-- **Fiches complètes** : marque, modèle, année, prix d'achat, valeur actuelle, date, emplacement,
-  notes + caractéristiques selon le type (surface et adresse pour l'immobilier, kilométrage
-  et immatriculation pour une voiture, référence et n° de série pour une montre…)
-- **Statuts** : possédé, wishlist, vendu
-- **Recherche** sur tous les champs
-- **Sauvegarde** : export / import d'un fichier unique (photos incluses)
+- **Vue d'ensemble** : patrimoine net, plus-value, capital investi, tes collections en grandes vignettes
+  (« Mes univers »), ta dernière évasion, la courbe d'évolution et la répartition
+- **Ambiances par collection** : agence de prestige pour l'immobilier, showroom pour le garage,
+  écrin pour l'horlogerie, casier pour la cave, mur de galerie pour l'art…
+- **Photos** : plusieurs par bien, glisser-déposer partout, visionneuse plein écran
+- **Famille** : les biens qui appartiennent à la famille (maison des parents, voiture, montre du
+  grand-père…). Tu y as accès dans l'appli, mais ils ne comptent pas dans ton patrimoine
+- **Vacances** : un carnet par voyage avec les trajets (choisis parmi tes véhicules, y compris ceux
+  de la famille, ou avion, train…), les hébergements (hôtel, location, une de tes propriétés,
+  la maison de famille), le récit jour par jour avec photos, l'album et le budget
+- **Apparence** : thème Jour (clair et chaleureux) ou Nuit, photo de fond au choix avec voile et flou
+- **Sauvegarde** : export / import d'un fichier unique (photos comprises)
 
 Les données restent sur ton ordinateur (menu « Dossier des données »), rien n'est envoyé en ligne.
 
